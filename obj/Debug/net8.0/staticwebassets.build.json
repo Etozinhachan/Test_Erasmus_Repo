@@ -1,11 +1,77 @@
 {
   "Version": 1,
-  "Hash": "jVe2ih1OACwhpOo8BmxBj0kq2wge529W15UvwErGaC4=",
+  "Hash": "2RNbpxx07HKJwyVO+WVzGJqODEhY03ZGt1zMpgZPUrk=",
   "Source": "testingStuff",
   "BasePath": "_content/testingStuff",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "testingStuff\\wwwroot",
+      "Source": "testingStuff",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\css\\style.css",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "css/style.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\style.css"
+    },
+    {
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\index.html",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\js\\script.js",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "js/script.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\script.js"
+    }
+  ]
 }

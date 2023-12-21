@@ -1,45 +1,57 @@
-/**
- * Helper function for POSTing data as JSON with fetch.
- *
- * @param {Object} options
- * @param {string} options.url - URL to POST data to
- * @param {FormData} options.formData - `FormData` instance
- * @return {Object} - Response body from URL that was POSTed to
- */
+
 var postFormDataAsJson = async({
     url,
-    formData
+    formData,
+    method
   }) => {
     const plainFormData = Object.fromEntries(formData.entries());
     const formDataJsonString = JSON.stringify(plainFormData);
   
     const fetchOptions = {
-      method: "POST",
+      method: `${method}`,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: formDataJsonString,
     };
-  
-  
-    alert("about to post" + formDataJsonString)
-    const response = await fetch(url, fetchOptions);
-  
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage);
+    let response;
+    switch(method){
+      case "POST": 
+        alert("about to post" + formDataJsonString)
+        response = await fetch(url, fetchOptions);
+      
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(errorMessage);
+        }
+        return response.json();
+        break;
+      
+      case "PUT": 
+          url = `${url}/${formData.get("Id")}`;
+
+         alert("about to put" + formDataJsonString)
+         console.log(formData)
+         console.log(formDataJsonString)
+         response = await fetch(url, fetchOptions)
+
+         if (!response.ok){
+          const errorMessage = await response.text();
+          throw new Error(errorMessage)
+         }
+         return response;
+        break;
+      
+      default:
+        return;
     }
-  
-    return response.json();
+    
+    
+    
   }
-  /**
-   * Event handler for a form submit event.
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event
-   * @example const exampleForm = document.getElementById("example-form");
-   *          exampleForm.addEventListener("submit", handleFormSubmit);
-   * @param {SubmitEvent} event
-   */
+  
+
   var handleFormSubmit = async(event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -47,9 +59,20 @@ var postFormDataAsJson = async({
   
     try {
       const formData = new FormData(form);
+      let method = typeof form.method == typeof String ? form.method : form.method.value
+      
+      if (form.querySelector('input#method') != null){
+        formData.delete("_METHOD")
+      }
+
+      console.log("method " + method)
+      console.log(method + " formData: " + formData + " form " + form)
+      console.log(formData)
+      
       const responseData = await postFormDataAsJson({
         url,
-        formData
+        formData,
+        method
       });
       console.log({
         responseData
@@ -59,23 +82,27 @@ var postFormDataAsJson = async({
     }
   }
 
-    /**
-   * Event handler for a form submit event.
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event
-   * @example const exampleForm = document.getElementById("example-form");
-   *          exampleForm.addEventListener("submit", handleFormSubmit);
-   * @param {SubmitEvent} event
-   */
+   
     var handleGetByIdFormSubmit = async(event) => {
         event.preventDefault();
         const form = event.currentTarget;
+        const action = form.action
         const formElements = form.querySelectorAll('input');
-        console.log(formElements)
-        const userId = formElements.querySelector('#get_userbyid_txt').value
-        console.log(userId)
-        /*
-        const url = `${form.action}/${userId}`;
-        form.submit()*/
+        //console.log(formElements)
+        //const userId = formElements.querySelector('#get_userbyid_txt').value
+        let userId;
+        formElements.forEach(element => {
+          if (element.id == "get_userbyid_txt"){
+            userId = element.value;
+          }
+        });
+        //console.log(userId)
+        
+        const url = `${action}/${userId}`;
+        form.action = url;
+        form.submit()
+
+        form.action = action
       }
   
   document.querySelector("form[name='addUser']")

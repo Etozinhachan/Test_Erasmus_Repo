@@ -16,6 +16,7 @@ var postFormDataAsJson = async({
       body: formDataJsonString,
     };
     let response;
+    method = method.toUpperCase();
     switch(method){
       case "POST": 
         alert("about to post" + formDataJsonString)
@@ -59,7 +60,7 @@ var postFormDataAsJson = async({
   
     try {
       const formData = new FormData(form);
-      let method = typeof form.method == typeof String ? form.method : form.method.value
+      let method = typeof form.method == typeof "" ? form.method : form.method.value
       
       if (form.querySelector('input#method') != null){
         formData.delete("_METHOD")
@@ -77,6 +78,7 @@ var postFormDataAsJson = async({
       console.log({
         responseData
       });
+      form.reset()
     } catch (error) {
       console.error(error);
     }
@@ -103,6 +105,7 @@ var postFormDataAsJson = async({
         form.submit()
 
         form.action = action
+        form.reset()
       }
   
   document.querySelector("form[name='addUser']")

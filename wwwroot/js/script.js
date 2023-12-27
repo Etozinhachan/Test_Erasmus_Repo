@@ -7,7 +7,7 @@ var postFormDataAsJson = async({
     const plainFormData = Object.fromEntries(formData.entries());
     const formDataJsonString = JSON.stringify(plainFormData);
   
-    const fetchOptions = {
+    let fetchOptions = {
       method: `${method}`,
       headers: {
         "Content-Type": "application/json",
@@ -42,14 +42,24 @@ var postFormDataAsJson = async({
           throw new Error(errorMessage)
          }
          return response;
+         break;
+
+      case "DELETE":
+        url = `${url}/${formData.get("id")}`;
+
+        alert('about to delete ' + formDataJsonString)
+        response = await fetch(url, fetchOptions)
+
+        if(!response.ok){
+          const errorMessage = await response.text();
+          throw new Error(errorMessage)
+        }
+        return response;
         break;
       
       default:
         return;
     }
-    
-    
-    
   }
   
 
@@ -61,14 +71,17 @@ var postFormDataAsJson = async({
     try {
       const formData = new FormData(form);
       let method = typeof form.method == typeof "" ? form.method : form.method.value
-      
       if (form.querySelector('input#method') != null){
         formData.delete("_METHOD")
       }
 
+      /*
+      console.log(form.method)
+
       console.log("method " + method)
       console.log(method + " formData: " + formData + " form " + form)
       console.log(formData)
+      */
       
       const responseData = await postFormDataAsJson({
         url,
@@ -108,9 +121,8 @@ var postFormDataAsJson = async({
         form.reset()
       }
   
-  document.querySelector("form[name='addUser']")
-    .addEventListener("submit", handleFormSubmit)
-  document.querySelector("form[name='updateUser']")
-    .addEventListener("submit", handleFormSubmit)
+  document.querySelectorAll("form[class='generalForms']").forEach(element => {
+      element.addEventListener("submit", handleFormSubmit)
+    });
   document.querySelector("form[name='getUserById']")
     .addEventListener("submit", handleGetByIdFormSubmit)

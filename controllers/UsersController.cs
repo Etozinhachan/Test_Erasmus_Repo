@@ -45,7 +45,7 @@ namespace testingStuff.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutUser([FromRoute]long id, User user)
         {
             if (id != user.Id)
             {
@@ -86,7 +86,7 @@ namespace testingStuff.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public async Task<IActionResult> DeleteUser([FromRoute] long id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)

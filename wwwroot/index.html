@@ -7,18 +7,20 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <p>Testing stuff</p>
+    <h1>Testing stuff</h1>
 
     <div id="request_container">
 
+        <h2>Get All Users</h2>
         <div class="endpoint_container" id="get_Users_Container">
             <form action="/api/Users" method="GET">
                 <input class="buttons" id="get_users" type="submit" value="Get Users">
             </form>
         </div>
 
-        <!-- DOING SOMETHING SO THE GET USER BY ID WORKS CORRECTLY ON THE JS FILE JUST SEE THE LINK ON THE README SO YOU REMEMBER WHAT YOU WERE DOING ALRIGHT?  -->
+        <br>
 
+        <h2>Get a user by their id</h2>
         <div class="endpoint_container" id="get_UserById_Container">
             <form name="getUserById" action="/api/Users" method="GET">
                 <label for="get_userbyid_txt">id: </label>
@@ -28,8 +30,11 @@
             </form>
         </div>
 
+        <br>
+
+        <h2>Update an user by their id</h2>
         <div class="endpoint_container" id="Put_User_Container">
-            <form name="updateUser" action="/api/Users" method="POST">
+            <form name="updateUser" action="/api/Users" method="POST" class="generalForms">
                 <input type="hidden" name="_METHOD" value="PUT" id="method"/>
                 <label for="put_user_idInput">id: </label>
                 <input type="number" name="Id" id="put_user_idInput" placeholder="Insert the id of the user here">
@@ -44,22 +49,34 @@
             </form>
         </div>
 
+        <br>
+
+        <h2>Add an user</h2>
         <div class="endpoint_container" id="Post_User_Container">
-            <form name="addUser" action="/api/Users" method="POST">
+            <form name="addUser" action="/api/Users" method="POST" class="generalForms">
                 <label for="post_user_usernameTxt">Username: </label>
                 <input type="text" name="UserName" id="post_user_usernameTxt" placeholder="Insert the username of the user you want to create here">
                 <br>
                 <label for="post_user_passwordTxt">Password: </label>
                 <input type="password" name="passHash" id="post_user_passwordTxt" placeholder="Insert the password of the user you want to create here">
                 <br>
-                <input type="submit" id="post_user_btn" value="Update User">
+                <input type="submit" id="post_user_btn" value="Add User">
             </form>
-            <button id=""></button>
         </div>
         
-        <!-- THIS IS IS GONNA BE A DELETE BUTTON FOR THE DELETE ENDPOINT -->
+        <br>
 
-        <button id=""></button>
+        <h2>Delete an user by their id</h2>
+        <div clas="endpoint_container" id="Delete_User_Container">
+            <form name="deleteUser" action="/api/Users" method="POST" class="generalForms">
+                <input type="hidden" name="_METHOD" value="DELETE" id="method"/>
+                <label for="delete_user_idField">Id: </label>
+                <input type="number" name="id" id="delete_user_idField" placeholder="Insert the id of the user here">
+                <br>
+                <input type="submit" id="delete_user_btn" value="Delete User">
+            </form>
+        </div>
+        
 
     </div>
     <script src="./js/script.js"></script>

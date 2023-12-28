@@ -10,7 +10,7 @@ namespace testingStuff.Controllers
     {
         
         [HttpPost]
-        [Route("getanswer")]
+        [Route("getGptAnswer")]
         public async Task<IActionResult> GetResult([FromBody] string prompt)
         {
             // Instances of the APIAuthentication class can be created using your API key.

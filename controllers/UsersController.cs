@@ -30,7 +30,7 @@ namespace testingStuff.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -45,9 +45,9 @@ namespace testingStuff.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromRoute]long id, User user)
+        public async Task<IActionResult> PutUser([FromRoute]Guid id, User user)
         {
-            if (id != user.Id)
+            if (id != user.id)
             {
                 return BadRequest();
             }
@@ -81,12 +81,12 @@ namespace testingStuff.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] long id)
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -100,9 +100,9 @@ namespace testingStuff.Controllers
             return NoContent();
         }
 
-        private bool UserExists(long id)
+        private bool UserExists(Guid id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.id == id);
         }
     }
 }

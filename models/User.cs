@@ -5,8 +5,10 @@ namespace testingStuff.models;
 public class User{
 
     [Key]
-    public long Id {get; set;}
-    public string UserName { get; set; }
-    public string passHash { get; set; }
+    public Guid id {get; set;}
+    public required string UserName { get; set; }
+    public required string passHash { get; set; }
+
+    public ICollection<Chat> chats{ get; }
 
 }

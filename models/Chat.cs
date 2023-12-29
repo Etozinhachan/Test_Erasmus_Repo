@@ -4,9 +4,7 @@ namespace testingStuff.models;
 
 public class Chat{
 
-    [Key]
     public Guid id { get; set; }
-    [Key]
     public Guid user_id { get; set; }
     public ICollection<UserPrompt> userPrompts { get; }
     public ICollection<ChatSucessfullResponse> chatPrompts { get; }

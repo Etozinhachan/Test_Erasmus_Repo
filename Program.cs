@@ -11,16 +11,19 @@ builder.Services.AddDbContext<DbDataContext>(opt =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
-/* SWAGGER THINGS
+// SWAGGER THINGS
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-*/
+
 
 
 var app = builder.Build();
 
-/* MORE SWAGGER
+// MORE SWAGGER
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,13 +33,14 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty;
     });
 }
-*/
+
 
 app.UseHttpsRedirection();
 
+/*
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
+*/
 
 app.UseAuthorization();
 

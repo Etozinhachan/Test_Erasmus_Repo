@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
 using testingStuff.models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace testingStuff.Controllers
 {
@@ -29,7 +31,7 @@ namespace testingStuff.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -44,13 +46,17 @@ namespace testingStuff.Controllers
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutUser([FromRoute]Guid id, User user)
         {
             if (id != user.id)
             {
                 return BadRequest();
             }
+
+            (string hash, string salt) = HashPassword(user.passHash);
+            user.passHash = hash;
+            user.salt = salt;
 
             _context.Entry(user).State = EntityState.Modified;
 
@@ -73,11 +79,44 @@ namespace testingStuff.Controllers
             return NoContent();
         }
 
+        #region PasswordEncyption
+
+        public static (string hash, string salt) HashPassword(string password)
+        {
+            // Generate a random salt
+            byte[] saltBytes = new byte[32];
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(saltBytes);
+            }
+
+            string salt = Convert.ToBase64String(saltBytes);
+
+            // Combine the password and salt, then hash
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] combinedBytes = Encoding.UTF8.GetBytes(password + salt);
+                byte[] hashBytes = sha256.ComputeHash(combinedBytes);
+                string hash = BitConverter.ToString(hashBytes).Replace("-", "");
+
+                return (hash, salt);
+            }
+            
+
+        
+        }
+
+        #endregion
+
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            user.id = Guid.NewGuid();
+            (string hash, string salt) = HashPassword(user.passHash);
+            user.passHash = hash;
+            user.salt = salt;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 

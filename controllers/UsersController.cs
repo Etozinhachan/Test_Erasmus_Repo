@@ -79,6 +79,60 @@ namespace testingStuff.Controllers
             return NoContent();
         }
 
+        // POST: api/Users
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        [Route("/register")]
+        public async Task<ActionResult<User>> registerUser(User user)
+        {
+            user.id = Guid.NewGuid();
+            (string hash, string salt) = HashPassword(user.passHash);
+            user.passHash = hash;
+            user.salt = salt;
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
+        }
+
+        [HttpPost]
+        [Route("/login")]
+        public async Task<ActionResult<User>> loginUser(User user)
+        {
+            (string hash, string salt) = HashPassword(user.passHash);
+            user.passHash = hash;
+            user.salt = salt;
+            
+            var searchUser = _context.Users.ToList().Find(u => u.UserName == user.UserName && u.passHash == user.passHash);
+            
+            if (searchUser == null){
+                return NotFound();
+            }
+
+            return Ok(searchUser);
+        }
+
+        // DELETE: api/Users/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool UserExists(Guid id)
+        {
+            return _context.Users.Any(e => e.id == id);
+        }
+
         #region PasswordEncyption
 
         public static (string hash, string salt) HashPassword(string password)
@@ -107,41 +161,5 @@ namespace testingStuff.Controllers
         }
 
         #endregion
-
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            user.id = Guid.NewGuid();
-            (string hash, string salt) = HashPassword(user.passHash);
-            user.passHash = hash;
-            user.salt = salt;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
-        }
-
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.id == id);
-        }
     }
 }

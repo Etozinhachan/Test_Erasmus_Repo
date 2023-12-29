@@ -8,6 +8,6 @@ public class Chat{
     public Guid user_id { get; set; }
     public ICollection<UserPrompt> userPrompts { get; }
     public ICollection<ChatSucessfullResponse> chatPrompts { get; }
-    public User user { get; set; }
+    public User? user { get; set; }
 
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Jc25qE9lpk+f4VIeRbbD2eqm+iEsVpA+4QGiBcP2FpI=",
+  "Hash": "wWkXM98w/CUZxQ9gupJCXPboZysKnKJU8xiEg1JAkGA=",
   "Source": "testingStuff",
   "BasePath": "_content/testingStuff",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "testingStuff\\wwwroot",
       "Source": "testingStuff",
-      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\style.css",
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\css\\style.css",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "css/style.css",
       "AssetKind": "All",
@@ -36,10 +36,29 @@
       "OriginalItemSpec": "wwwroot\\css\\style.css"
     },
     {
-      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\index.html",
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\endpoints.html",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "endpoints.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\endpoints.html"
+    },
+    {
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\index.html",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -55,10 +74,29 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\script.js",
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\js\\login.js",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "js/login.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\login.js"
+    },
+    {
+      "Identity": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\js\\script.js",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\student\\meow\\AI\\testingStuff\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "js/script.js",
       "AssetKind": "All",

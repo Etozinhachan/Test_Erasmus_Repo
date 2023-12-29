@@ -7,7 +7,7 @@ public class User{
     public Guid id {get; set;}
     public required string UserName { get; set; }
     public required string passHash { get; set; }
-    public required string salt { get; set; }
+    public string? salt { get; set; }
     public ICollection<Chat>? chats{ get; }
 
 }

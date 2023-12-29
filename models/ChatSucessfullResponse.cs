@@ -8,5 +8,5 @@ public class ChatSucessfullResponse{
     public required string response { get; set; }
     public bool is_final { get; set; }
 
-    public Chat chat { get; set; }
+    public Chat? chat { get; set; }
 }

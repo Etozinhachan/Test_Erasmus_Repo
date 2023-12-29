@@ -57,15 +57,26 @@ namespace testingStuff.Controllers
                 });
             }
 
+            var newChat = new Chat{
+                id = Guid.NewGuid(),
+                user_id = userPrompt.id,
+            };
+
             var chatResponse = new ChatSucessfullResponse{
                 conversation_id = Guid.NewGuid(),
                 response = getApiFullResponse(prompt: userPrompt.prompt),
                 is_final = false 
             };
 
-            _context.AiResponses.Add(chatResponse);
-
-            return Ok();
+            userPrompt.conversation_id = chatResponse.conversation_id;
+/* 
+            newChat.chatPrompts.Add(chatResponse);
+            newChat.userPrompts.Add(userPrompt);
+ */
+            await _context.Chats.AddAsync(newChat);
+            await _context.AiResponses.AddAsync(chatResponse);
+            await _context.userPrompts.AddAsync(userPrompt);
+            return Ok(newChat);
 
         }
 

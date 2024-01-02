@@ -82,7 +82,7 @@ namespace testingStuff.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("/register")]
+        [Route("register")]
         public async Task<ActionResult<User>> registerUser(User user)
         {
             user.id = Guid.NewGuid();
@@ -96,7 +96,7 @@ namespace testingStuff.Controllers
         }
 
         [HttpPost]
-        [Route("/login")]
+        [Route("login")]
         public async Task<ActionResult<User>> loginUser(User user)
         {
             (string hash, string salt) = HashPassword(user.passHash);
@@ -132,6 +132,14 @@ namespace testingStuff.Controllers
         {
             return _context.Users.Any(e => e.id == id);
         }
+
+        #region getUserByUsername
+        [HttpGet]
+        [Route("{username}")]
+        public async Task<ActionResult<User>> getUserByUsername([FromRoute] string username){
+            return Ok(_context.Users.ToList().Find(u => u.UserName == username));
+        }
+        #endregion
 
         #region PasswordEncyption
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace testingStuff.models;
 
@@ -10,5 +11,6 @@ public class ChatResponse{
     public required string title { get; set; }
     public int status { get; set; }
     public required string detail { get; set; }
+    [JsonIgnore]
     public Chat? chat { get; set; }
 }

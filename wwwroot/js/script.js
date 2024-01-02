@@ -74,6 +74,9 @@ var postFormDataAsJson = async({
       if (form.querySelector('input#method') != null){
         formData.delete("_METHOD")
       }
+      if (formData.has("passHash")){
+        
+      }
 
       /*
       console.log(form.method)

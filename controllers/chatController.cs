@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
 using testingStuff.models;
 
@@ -10,11 +12,13 @@ namespace testingStuff.Controllers
     {
         #region constructor thingies
         private readonly DbDataContext _context;
+        private readonly IMapper _mapper;
         private readonly int characterLimitPerResponse = 25;
 
-        public chatController(DbDataContext context)
+        public chatController(DbDataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         #endregion
 
@@ -40,7 +44,7 @@ namespace testingStuff.Controllers
 
         #region startChat
         [HttpPost]
-        public async Task<ActionResult<ChatResponse>> createChat(UserPrompt userPrompt){
+        public async Task<ActionResult<Chat>> createChat(UserPrompt userPrompt){
             if (userPrompt == null || userPrompt.prompt.Length == 0){
                 return BadRequest(new ChatBadResponse{
                     title = "Bad Request",
@@ -59,16 +63,18 @@ namespace testingStuff.Controllers
 
             var newChat = new Chat{
                 id = Guid.NewGuid(),
-                user_id = userPrompt.id,
+                user_id = userPrompt.user_id,
             };
 
             var chatResponse = new ChatSucessfullResponse{
-                conversation_id = Guid.NewGuid(),
+                id = Guid.NewGuid(),
+                conversation_id = newChat.id,
                 response = getApiFullResponse(prompt: userPrompt.prompt),
                 is_final = false 
             };
 
             userPrompt.conversation_id = chatResponse.conversation_id;
+            userPrompt.id = Guid.NewGuid();
 /* 
             newChat.chatPrompts.Add(chatResponse);
             newChat.userPrompts.Add(userPrompt);
@@ -76,6 +82,9 @@ namespace testingStuff.Controllers
             await _context.Chats.AddAsync(newChat);
             await _context.AiResponses.AddAsync(chatResponse);
             await _context.userPrompts.AddAsync(userPrompt);
+
+            await _context.SaveChangesAsync();
+
             return Ok(newChat);
 
         }
@@ -83,5 +92,60 @@ namespace testingStuff.Controllers
 
         #endregion
 
+        #region getAllChatsFromAUser
+        [HttpGet]
+        [Route("Chats/{user_id:guid}")] 
+        public async Task<ActionResult<IEnumerable<Chat>>> getChats(Guid user_id){
+            var searchChats = await _context.Chats.Where(u => u.user.id == user_id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).OrderBy(c => c.id).ToListAsync();
+
+            if (!ModelState.IsValid){
+                return BadRequest(searchChats);
+            }
+
+            return searchChats;
+        }
+        #endregion
+
+        #region getAllChatResponses
+        [HttpGet]
+        [Route("ChatResponses")]
+        public async Task<ActionResult<IEnumerable<ChatSucessfullResponse>>> getChatResponses(){
+            var searchChatResponses = await _context.AiResponses.OrderBy(cr => cr.id).ToListAsync();
+
+            if (!ModelState.IsValid){
+                return BadRequest(searchChatResponses);
+            }
+
+            return searchChatResponses;
+        }
+        #endregion
+
+        #region getAllUserPrompts
+        [HttpGet]
+        [Route("UserPrompts")] 
+        public async Task<ActionResult<IEnumerable<UserPrompt>>> getUserPrompts(){
+            var searchUserPrompts = await _context.userPrompts.OrderBy(up => up.id).ToListAsync();
+
+            if (!ModelState.IsValid){
+                return BadRequest(searchUserPrompts);
+            }
+
+            return searchUserPrompts;
+        }
+        #endregion
+
+        #region getChatById
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<ActionResult<Chat>> getChatById([FromRoute] Guid id){
+            var searchChat = _context.Chats.Where(c => c.id == id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).FirstOrDefault();
+
+            if (searchChat == null){
+                return NotFound();
+            }
+            
+            return Ok(searchChat);
+        }
+        #endregion
     }
 }

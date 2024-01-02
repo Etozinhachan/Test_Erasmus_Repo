@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
+using testingStuff.Interfaces;
 using testingStuff.models;
 
 namespace testingStuff.Controllers
@@ -11,13 +12,13 @@ namespace testingStuff.Controllers
     public class chatController : ControllerBase
     {
         #region constructor thingies
-        private readonly DbDataContext _context;
+        private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly int characterLimitPerResponse = 25;
 
-        public chatController(DbDataContext context, IMapper mapper)
+        public chatController(IChatRepository chatRepository, IMapper mapper)
         {
-            _context = context;
+            _chatRepository = chatRepository;
             _mapper = mapper;
         }
         #endregion
@@ -44,8 +45,8 @@ namespace testingStuff.Controllers
 
         #region startChat
         [HttpPost]
-        public async Task<ActionResult<Chat>> createChat(UserPrompt userPrompt){
-            if (userPrompt == null || userPrompt.prompt.Length == 0){
+        public async Task<ActionResult<Chat>> createChat(UserPromptDTO userPromptDTO){
+            if (userPromptDTO == null || userPromptDTO.prompt.Length == 0){
                 return BadRequest(new ChatBadResponse{
                     title = "Bad Request",
                     status = 400,
@@ -53,7 +54,7 @@ namespace testingStuff.Controllers
                 });
             }
 
-            if (userPrompt.prompt == "test_error"){
+            if (userPromptDTO.prompt == "test_error"){
                 return StatusCode(503, new ChatBadResponse{
                     title = "Service unavailable",
                     status = 503,
@@ -63,27 +64,30 @@ namespace testingStuff.Controllers
 
             var newChat = new Chat{
                 id = Guid.NewGuid(),
-                user_id = userPrompt.user_id,
+                user_id = userPromptDTO.user_id,
             };
 
             var chatResponse = new ChatSucessfullResponse{
                 id = Guid.NewGuid(),
                 conversation_id = newChat.id,
-                response = getApiFullResponse(prompt: userPrompt.prompt),
+                response = getApiFullResponse(prompt: userPromptDTO.prompt),
                 is_final = true 
             };
 
-            userPrompt.conversation_id = chatResponse.conversation_id;
-            userPrompt.id = Guid.NewGuid();
+            var userPrompt = new UserPrompt{
+                id = Guid.NewGuid(),
+                conversation_id = chatResponse.conversation_id,
+                user_id = userPromptDTO.user_id,
+                prompt = userPromptDTO.prompt
+            };
+
 /* 
             newChat.chatPrompts.Add(chatResponse);
             newChat.userPrompts.Add(userPrompt);
  */
-            await _context.Chats.AddAsync(newChat);
-            await _context.AiResponses.AddAsync(chatResponse);
-            await _context.userPrompts.AddAsync(userPrompt);
-
-            await _context.SaveChangesAsync();
+            _chatRepository.AddChat(newChat);
+            _chatRepository.AddAiResponse(chatResponse);
+            _chatRepository.AddUserPrompt(userPrompt);
 
             return Ok(newChat);
 
@@ -95,13 +99,15 @@ namespace testingStuff.Controllers
         #region continueChatPut
         [HttpPut]
         [Route("{conversation_id:guid}")]
-        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPrompt userPrompt){
+        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPromptDTODTO userPromptDTODTO){
             
-            if (!chatExists(conversation_id)){
+            if (!_chatRepository.chatExists(conversation_id)){
                 NotFound();
             }
 
-            if (userPrompt.prompt.Length == 0){
+            var chat = _chatRepository.getChatByConvoId(conversation_id);
+
+            if (userPromptDTODTO.prompt.Length == 0 || !_chatRepository.isFinal(_chatRepository.getLastAiResponse(chat))){
                 return BadRequest(new ChatBadResponse{
                     title = "Bad Request",
                     status = 400,
@@ -109,7 +115,7 @@ namespace testingStuff.Controllers
                 });
             }
 
-            if (userPrompt.prompt == "test_error"){
+            if (userPromptDTODTO.prompt == "test_error"){
                 return BadRequest(new ChatBadResponse{
                     title = "Service Unavailable",
                     status = 503,
@@ -117,24 +123,24 @@ namespace testingStuff.Controllers
                 });
             }
 
-            var chat = _context.Chats.Where(c => c.id == conversation_id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).FirstOrDefault();
-
-            // verificar se a ultima ai response eh final ou nao : )
-
             var chatResponse = new ChatSucessfullResponse{
                 conversation_id = conversation_id,
                 id = Guid.NewGuid(),
                 is_final = false,
-                response = getApiFullResponse(userPrompt.prompt)
+                response = getApiFullResponse(userPromptDTODTO.prompt)
             };
 
-            userPrompt.conversation_id = conversation_id;
-            userPrompt.id = Guid.NewGuid();
+            var userPrompt = new UserPrompt{
+                id = Guid.NewGuid(),
+                conversation_id = conversation_id,
+                user_id = _chatRepository.getChatByConvoId(conversation_id).user_id,
+                prompt = userPromptDTODTO.prompt
+            };
             
-            await _context.userPrompts.AddAsync(userPrompt);
-            await _context.AiResponses.AddAsync(chatResponse);
+            _chatRepository.AddUserPrompt(userPrompt);
+            _chatRepository.AddAiResponse(chatResponse);
 
-            return Ok();
+            return Ok(_chatRepository.getChatByConvoId(conversation_id));
         }
         #endregion
 
@@ -142,13 +148,13 @@ namespace testingStuff.Controllers
         [HttpGet]
         [Route("Chats/{user_id:guid}")] 
         public async Task<ActionResult<IEnumerable<Chat>>> getChats(Guid user_id){
-            var searchChats = await _context.Chats.Where(u => u.user.id == user_id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).OrderBy(c => c.id).ToListAsync();
+            var searchChats = _chatRepository.getAllUserChats(user_id);
 
             if (!ModelState.IsValid){
                 return BadRequest(searchChats);
             }
 
-            return searchChats;
+            return Ok(searchChats);
         }
         #endregion
 
@@ -156,13 +162,13 @@ namespace testingStuff.Controllers
         [HttpGet]
         [Route("ChatResponses")]
         public async Task<ActionResult<IEnumerable<ChatSucessfullResponse>>> getChatResponses(){
-            var searchChatResponses = await _context.AiResponses.OrderBy(cr => cr.id).ToListAsync();
+            var searchChatResponses = _chatRepository.getAllAiResponses;
 
             if (!ModelState.IsValid){
                 return BadRequest(searchChatResponses);
             }
 
-            return searchChatResponses;
+            return Ok(searchChatResponses);
         }
         #endregion
 
@@ -170,13 +176,13 @@ namespace testingStuff.Controllers
         [HttpGet]
         [Route("UserPrompts")] 
         public async Task<ActionResult<IEnumerable<UserPrompt>>> getUserPrompts(){
-            var searchUserPrompts = await _context.userPrompts.OrderBy(up => up.id).ToListAsync();
+            var searchUserPrompts = _chatRepository.getAllUserPrompts();
 
             if (!ModelState.IsValid){
                 return BadRequest(searchUserPrompts);
             }
 
-            return searchUserPrompts;
+            return Ok(searchUserPrompts);
         }
         #endregion
 
@@ -184,7 +190,7 @@ namespace testingStuff.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         public async Task<ActionResult<Chat>> getChatById([FromRoute] Guid id){
-            var searchChat = _context.Chats.Where(c => c.id == id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).FirstOrDefault();
+            var searchChat = _chatRepository.getChatByConvoId(id);
 
             if (searchChat == null){
                 return NotFound();
@@ -194,10 +200,6 @@ namespace testingStuff.Controllers
         }
         #endregion
     
-        #region helper methods
-        public bool chatExists(Guid id){
-            return _context.Chats.Any(c => c.id == id);
-        }
-        #endregion
+
     }
 }

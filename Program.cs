@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
+using testingStuff.Interfaces;
+using testingStuff.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DbDataContext>(opt =>
     opt.UseInMemoryDatabase("Users"));

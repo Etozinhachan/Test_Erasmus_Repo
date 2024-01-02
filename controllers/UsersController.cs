@@ -99,7 +99,14 @@ namespace testingStuff.Controllers
         [Route("login")]
         public async Task<ActionResult<User>> loginUser(User user)
         {
-            (string hash, string salt) = HashPassword(user.passHash);
+
+            if (!UserExists(user.UserName)){
+                return NotFound();
+            }
+
+            string salt = _context.Users.ToList().Find(u => u.UserName == user.UserName).salt;
+
+            string hash = HashPassword(user.passHash, salt);
             user.passHash = hash;
             user.salt = salt;
             
@@ -131,6 +138,11 @@ namespace testingStuff.Controllers
         private bool UserExists(Guid id)
         {
             return _context.Users.Any(e => e.id == id);
+        }
+
+        private bool UserExists(string username)
+        {
+            return _context.Users.Any(e => e.UserName == username);
         }
 
         #region getUserByUsername
@@ -165,6 +177,20 @@ namespace testingStuff.Controllers
             }
             
 
+        
+        }
+
+        public static string HashPassword(string password, string salt)
+        {
+            // Combine the password and salt, then hash
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] combinedBytes = Encoding.UTF8.GetBytes(password + salt);
+                byte[] hashBytes = sha256.ComputeHash(combinedBytes);
+                string hash = BitConverter.ToString(hashBytes).Replace("-", "");
+
+                return hash;
+            }
         
         }
 

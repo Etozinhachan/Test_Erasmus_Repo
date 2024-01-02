@@ -70,7 +70,7 @@ namespace testingStuff.Controllers
                 id = Guid.NewGuid(),
                 conversation_id = newChat.id,
                 response = getApiFullResponse(prompt: userPrompt.prompt),
-                is_final = false 
+                is_final = true 
             };
 
             userPrompt.conversation_id = chatResponse.conversation_id;
@@ -90,6 +90,52 @@ namespace testingStuff.Controllers
         }
 
 
+        #endregion
+
+        #region continueChatPut
+        [HttpPut]
+        [Route("{conversation_id:guid}")]
+        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPrompt userPrompt){
+            
+            if (!chatExists(conversation_id)){
+                NotFound();
+            }
+
+            if (userPrompt.prompt.Length == 0){
+                return BadRequest(new ChatBadResponse{
+                    title = "Bad Request",
+                    status = 400,
+                    detail = "The request is invalid."
+                });
+            }
+
+            if (userPrompt.prompt == "test_error"){
+                return BadRequest(new ChatBadResponse{
+                    title = "Service Unavailable",
+                    status = 503,
+                    detail = "The service is currently unavailable."
+                });
+            }
+
+            var chat = _context.Chats.Where(c => c.id == conversation_id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).FirstOrDefault();
+
+            // verificar se a ultima ai response eh final ou nao : )
+
+            var chatResponse = new ChatSucessfullResponse{
+                conversation_id = conversation_id,
+                id = Guid.NewGuid(),
+                is_final = false,
+                response = getApiFullResponse(userPrompt.prompt)
+            };
+
+            userPrompt.conversation_id = conversation_id;
+            userPrompt.id = Guid.NewGuid();
+            
+            await _context.userPrompts.AddAsync(userPrompt);
+            await _context.AiResponses.AddAsync(chatResponse);
+
+            return Ok();
+        }
         #endregion
 
         #region getAllChatsFromAUser
@@ -145,6 +191,12 @@ namespace testingStuff.Controllers
             }
             
             return Ok(searchChat);
+        }
+        #endregion
+    
+        #region helper methods
+        public bool chatExists(Guid id){
+            return _context.Chats.Any(c => c.id == id);
         }
         #endregion
     }

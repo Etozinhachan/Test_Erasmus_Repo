@@ -34,7 +34,7 @@ public class DbDataContext : DbContext
             .WithOne(e => e.chat)
             .HasForeignKey(e => e.conversation_id)
             .HasPrincipalKey(e => e.id);
-
+        
         base.OnModelCreating(modelBuilder);
     }
 }

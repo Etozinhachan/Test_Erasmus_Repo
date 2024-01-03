@@ -5,7 +5,7 @@ namespace testingStuff.models;
 
 public class UserPromptDTO{
 
-    public Guid user_id { get; set; }
+    public required Guid user_id { get; set; }
     public required string prompt { get; set; }
 
 }

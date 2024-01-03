@@ -47,16 +47,21 @@ namespace testingStuff.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> PutUser([FromRoute]Guid id, User user)
+        public async Task<IActionResult> PutUser([FromRoute]Guid id, UserDTODTO userDTODTO)
         {
-            if (id != user.id)
+            if (id != userDTODTO.id)
             {
                 return BadRequest();
             }
 
-            (string hash, string salt) = HashPassword(user.passHash);
-            user.passHash = hash;
-            user.salt = salt;
+            (string hash, string salt) = HashPassword(userDTODTO.passHash);
+
+            var user = new User{
+                id = id,
+                UserName = userDTODTO.UserName,
+                passHash = hash,
+                salt = salt
+            };
 
             _context.Entry(user).State = EntityState.Modified;
 
@@ -83,12 +88,15 @@ namespace testingStuff.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<User>> registerUser(User user)
+        public async Task<ActionResult<User>> registerUser(UserDTO userDTO)
         {
-            user.id = Guid.NewGuid();
-            (string hash, string salt) = HashPassword(user.passHash);
-            user.passHash = hash;
-            user.salt = salt;
+            (string hash, string salt) = HashPassword(userDTO.passHash);
+            var user = new User{
+                id = Guid.NewGuid(),
+                UserName = userDTO.UserName,
+                passHash = hash,
+                salt = salt,
+            };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -97,20 +105,19 @@ namespace testingStuff.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<User>> loginUser(User user)
+        public async Task<ActionResult<User>> loginUser(UserDTO userDTO)
         {
 
-            if (!UserExists(user.UserName)){
+            if (!UserExists(userDTO.UserName)){
                 return NotFound();
             }
 
-            string salt = _context.Users.ToList().Find(u => u.UserName == user.UserName).salt;
+            string salt = _context.Users.ToList().Find(u => u.UserName == userDTO.UserName).salt;
 
-            string hash = HashPassword(user.passHash, salt);
-            user.passHash = hash;
-            user.salt = salt;
+            string hash = HashPassword(userDTO.passHash, salt);
+            userDTO.passHash = hash;
             
-            var searchUser = _context.Users.ToList().Find(u => u.UserName == user.UserName && u.passHash == user.passHash);
+            var searchUser = _context.Users.ToList().Find(u => u.UserName == userDTO.UserName && u.passHash == userDTO.passHash);
             
             if (searchUser == null){
                 return NotFound();

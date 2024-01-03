@@ -22,7 +22,7 @@ public class ChatRepository : IChatRepository
     {
         return aiResponse.is_final;
     }
-    public ChatSucessfullResponse getLastAiResponse(Chat chat)
+    public ChatSucessfullResponse? getLastAiResponse(Chat chat)
     {
         return chat.chatPrompts.LastOrDefault();
     }
@@ -50,18 +50,29 @@ public class ChatRepository : IChatRepository
     public void AddUserPrompt(UserPrompt userPrompt)
     {
         _context.userPrompts.Add(userPrompt);
-        _context.SaveChanges();
+        SaveChanges();
     }
 
     public void AddAiResponse(ChatSucessfullResponse AiResponse)
     {
         _context.AiResponses.Add(AiResponse);
-        _context.SaveChanges();
+        SaveChanges();
     }
 
     public void AddChat(Chat chat)
     {
         _context.Chats.Add(chat);
+        SaveChanges();
+    }
+
+    public void aiResponseModified(ChatSucessfullResponse chatResponse)
+    {
+        _context.Entry(chatResponse).State = EntityState.Modified;
+        SaveChanges();
+    }
+
+    public void SaveChanges()
+    {
         _context.SaveChanges();
     }
 }

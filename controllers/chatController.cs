@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
+using testingStuff.helper;
 using testingStuff.Interfaces;
 using testingStuff.models;
 
@@ -24,16 +25,53 @@ namespace testingStuff.Controllers
         #endregion
 
         #region ApiResponsePool
-        private string getApiFullResponse(string prompt){
+        private (string response, bool isFinal) getApiFullResponse(string prompt, ChatSucessfullResponse? aiResponse)
+        {
+            if (aiResponse == null){
+                aiResponse = new ChatSucessfullResponse{
+                    response = ""
+                };
+            }
             prompt = prompt.ToLower();
-            string[] acceptableUserPrompts = {"hello", "bye", "good morning"};
-            string[] randomResponses = {"The sun was setting behind the mountains, casting a warm glow over the valley below.", "The sound of the waves crashing against the shore was soothing to her ears.", "The old man sat on the bench, watching the children play in the park.", "The smell of freshly baked bread wafted through the air, making her mouth water.", "The city was alive with the sound of honking cars and bustling pedestrians.", "The stars twinkled in the sky, as if they were winking at her.", "The wind howled through the trees, making them sway back and forth.", "The rain pattered against the window, creating a soothing rhythm.", "The fire crackled in the fireplace, warming the room and casting a soft glow.", "The snowflakes fell gently from the sky, blanketing the ground in white."};
-            string[] promptResponses = {"Hello, how can i help you?", "Goodbye, hope you come back soon.", "Good morning, how can i help you?"};
-            Random random = new Random();
             string returnValue = "";
-            returnValue = acceptableUserPrompts.Contains(prompt) ? promptResponses[Array.IndexOf(acceptableUserPrompts, prompt)] : randomResponses[random.Next(randomResponses.Length)];
+            string[] acceptableUserPrompts = { "hello", "bye", "good morning" };
+            string[] randomResponses = { "The sun was setting behind the mountains, casting a warm glow over the valley below.", "The sound of the waves crashing against the shore was soothing to her ears.", "The old man sat on the bench, watching the children play in the park.", "The smell of freshly baked bread wafted through the air, making her mouth water.", "The city was alive with the sound of honking cars and bustling pedestrians.", "The stars twinkled in the sky, as if they were winking at her.", "The wind howled through the trees, making them sway back and forth.", "The rain pattered against the window, creating a soothing rhythm.", "The fire crackled in the fireplace, warming the room and casting a soft glow.", "The snowflakes fell gently from the sky, blanketing the ground in white." };
+            string[] promptResponses = { "Hello, how can i help you?", "Goodbye, hope you come back soon.", "Good morning, how can i help you?" };
+            bool is_final = false;
+            if (aiResponse.response.Length == 0)
+            {
+                Random random = new Random();
+                returnValue = acceptableUserPrompts.Contains(prompt) ? promptResponses[Array.IndexOf(acceptableUserPrompts, prompt)] : randomResponses[random.Next(randomResponses.Length)];
+                var returnLength = returnValue.Length;
+                returnValue = returnValue.Substring(0, characterLimitPerResponse);
+                
+                is_final = returnLength <= characterLimitPerResponse;
+                return (returnValue, is_final);
+            }
+            string currentResponse = aiResponse.response;
+            string responsePattern = HelperMethods.arrayContains(promptResponses, currentResponse) ? promptResponses[HelperMethods.getResponsePoolIndex(promptResponses, currentResponse)] : randomResponses[HelperMethods.getResponsePoolIndex(randomResponses, currentResponse)];
+            string nextResponse = "";
+            if (responsePattern.Length - currentResponse.Length > characterLimitPerResponse)
+            {
+                nextResponse = currentResponse + responsePattern.Substring(currentResponse.Length, characterLimitPerResponse);
+            }
+            else
+            {
+                is_final = true;
+                nextResponse = currentResponse + responsePattern.Substring(currentResponse.Length, responsePattern.Length - currentResponse.Length);
+            }
+            return (nextResponse,is_final);
 
-            return returnValue;
+        }
+
+        private (string response, bool is_final) generateAiResponse(Guid chat_id)
+        {
+            var userPrompt = _chatRepository.getLastUserPrompt(_chatRepository.getChatByConvoId(chat_id));
+            ChatSucessfullResponse? aiResponse = _chatRepository.getLastAiResponse(_chatRepository.getChatByConvoId(chat_id));
+
+
+            string prompt = userPrompt.prompt.ToLower();
+            return getApiFullResponse(prompt, aiResponse);
         }
 
         /* private string getApiPartialResponse(string prompt){
@@ -45,49 +83,62 @@ namespace testingStuff.Controllers
 
         #region startChat
         [HttpPost]
-        public async Task<ActionResult<Chat>> createChat(UserPromptDTO userPromptDTO){
-            if (userPromptDTO == null || userPromptDTO.prompt.Length == 0){
-                return BadRequest(new ChatBadResponse{
+        public async Task<ActionResult<Chat>> createChat(UserPromptDTO userPromptDTO)
+        {
+            if (userPromptDTO == null || userPromptDTO.prompt.Length == 0)
+            {
+                return BadRequest(new ChatBadResponse
+                {
                     title = "Bad Request",
                     status = 400,
                     detail = "The request is invalid."
                 });
             }
 
-            if (userPromptDTO.prompt == "test_error"){
-                return StatusCode(503, new ChatBadResponse{
+            if (userPromptDTO.prompt == "test_error")
+            {
+                return StatusCode(503, new ChatBadResponse
+                {
                     title = "Service unavailable",
                     status = 503,
                     detail = "The service is currently unavailable."
                 });
             }
 
-            var newChat = new Chat{
+            var newChat = new Chat
+            {
                 id = Guid.NewGuid(),
                 user_id = userPromptDTO.user_id,
             };
 
-            var chatResponse = new ChatSucessfullResponse{
+            var userPrompt = new UserPrompt
+            {
                 id = Guid.NewGuid(),
                 conversation_id = newChat.id,
-                response = getApiFullResponse(prompt: userPromptDTO.prompt),
-                is_final = true 
-            };
-
-            var userPrompt = new UserPrompt{
-                id = Guid.NewGuid(),
-                conversation_id = chatResponse.conversation_id,
                 user_id = userPromptDTO.user_id,
                 prompt = userPromptDTO.prompt
             };
 
-/* 
-            newChat.chatPrompts.Add(chatResponse);
-            newChat.userPrompts.Add(userPrompt);
- */
             _chatRepository.AddChat(newChat);
-            _chatRepository.AddAiResponse(chatResponse);
             _chatRepository.AddUserPrompt(userPrompt);
+
+            var (response, is_final) = generateAiResponse(newChat.id);
+
+            var chatResponse = new ChatSucessfullResponse
+            {
+                id = Guid.NewGuid(),
+                conversation_id = newChat.id,
+                response = response,
+                is_final = is_final
+            };
+
+            
+
+            /* 
+                        newChat.chatPrompts.Add(chatResponse);
+                        newChat.userPrompts.Add(userPrompt);
+             */
+            _chatRepository.AddAiResponse(chatResponse);
 
             return Ok(newChat);
 
@@ -99,22 +150,91 @@ namespace testingStuff.Controllers
         #region continueChatPut
         [HttpPut]
         [Route("{conversation_id:guid}")]
-        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPromptDTODTO userPromptDTODTO){
-            
-            if (!_chatRepository.chatExists(conversation_id)){
+        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPromptDTODTO userPromptDTODTO)
+        {
+
+            if (!_chatRepository.chatExists(conversation_id))
+            {
                 NotFound();
             }
 
             var chat = _chatRepository.getChatByConvoId(conversation_id);
 
-            if (userPromptDTODTO.prompt.Length == 0 || !_chatRepository.isFinal(_chatRepository.getLastAiResponse(chat))){
-                return BadRequest(new ChatBadResponse{
+            if (userPromptDTODTO.prompt.Length == 0 || !_chatRepository.isFinal(_chatRepository.getLastAiResponse(chat)))
+            {
+                return BadRequest(new ChatBadResponse
+                {
                     title = "Bad Request",
                     status = 400,
                     detail = "The request is invalid."
                 });
             }
 
+            if (userPromptDTODTO.prompt == "test_error")
+            {
+                return BadRequest(new ChatBadResponse
+                {
+                    title = "Service Unavailable",
+                    status = 503,
+                    detail = "The service is currently unavailable."
+                });
+            }
+
+            
+
+            var chatResponse = new ChatSucessfullResponse
+            {
+                conversation_id = conversation_id,
+                id = Guid.NewGuid(),
+                is_final = false,
+                response = ""
+            };
+
+            _chatRepository.AddAiResponse(chatResponse);
+
+            var userPrompt = new UserPrompt
+            {
+                id = Guid.NewGuid(),
+                conversation_id = conversation_id,
+                user_id = _chatRepository.getChatByConvoId(conversation_id).user_id,
+                prompt = userPromptDTODTO.prompt
+            };
+            _chatRepository.AddUserPrompt(userPrompt);
+
+            var (response, is_final) = generateAiResponse(chatResponse.conversation_id);
+            chatResponse.response = response;
+            chatResponse.is_final = is_final;
+            
+            _chatRepository.aiResponseModified(chatResponse);
+
+            return Ok(_chatRepository.getChatByConvoId(conversation_id));
+        }
+        #endregion
+
+        #region ContinueChatGetMethod
+
+        [HttpGet]
+        [Route("{conversation_id:guid}")]
+        public async Task<ActionResult<Chat>> getChatContinuation([FromRoute] Guid conversation_id)
+        {
+            if (!_chatRepository.chatExists(conversation_id))
+            {
+                NotFound();
+            }
+
+            var chat = _chatRepository.getChatByConvoId(conversation_id);
+
+            if (_chatRepository.isFinal(_chatRepository.getLastAiResponse(chat)))
+            {
+                return BadRequest(new ChatBadResponse
+                {
+                    title = "Bad Request",
+                    status = 400,
+                    detail = "The request is invalid."
+                });
+            }
+
+            /*
             if (userPromptDTODTO.prompt == "test_error"){
                 return BadRequest(new ChatBadResponse{
                     title = "Service Unavailable",
@@ -122,35 +242,39 @@ namespace testingStuff.Controllers
                     detail = "The service is currently unavailable."
                 });
             }
+            */
 
-            var chatResponse = new ChatSucessfullResponse{
+            var (response, is_final) = generateAiResponse(conversation_id);
+/* 
+            var chatResponse = new ChatSucessfullResponse
+            {
                 conversation_id = conversation_id,
-                id = Guid.NewGuid(),
-                is_final = false,
-                response = getApiFullResponse(userPromptDTODTO.prompt)
-            };
+                id = _chatRepository.getLastAiResponse(chat).id,
+                is_final = is_final,
+                response = response
+            }; */
 
-            var userPrompt = new UserPrompt{
-                id = Guid.NewGuid(),
-                conversation_id = conversation_id,
-                user_id = _chatRepository.getChatByConvoId(conversation_id).user_id,
-                prompt = userPromptDTODTO.prompt
-            };
-            
-            _chatRepository.AddUserPrompt(userPrompt);
-            _chatRepository.AddAiResponse(chatResponse);
+            var oldChatResponse = _chatRepository.getLastAiResponse(chat);
+
+            oldChatResponse.is_final = is_final;
+            oldChatResponse.response = response;
+
+            _chatRepository.aiResponseModified(oldChatResponse);
 
             return Ok(_chatRepository.getChatByConvoId(conversation_id));
         }
+
         #endregion
 
         #region getAllChatsFromAUser
         [HttpGet]
-        [Route("Chats/{user_id:guid}")] 
-        public async Task<ActionResult<IEnumerable<Chat>>> getChats(Guid user_id){
+        [Route("Chats/{user_id:guid}")]
+        public async Task<ActionResult<IEnumerable<Chat>>> getChats(Guid user_id)
+        {
             var searchChats = _chatRepository.getAllUserChats(user_id);
 
-            if (!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(searchChats);
             }
 
@@ -161,10 +285,12 @@ namespace testingStuff.Controllers
         #region getAllChatResponses
         [HttpGet]
         [Route("ChatResponses")]
-        public async Task<ActionResult<IEnumerable<ChatSucessfullResponse>>> getChatResponses(){
+        public async Task<ActionResult<IEnumerable<ChatSucessfullResponse>>> getChatResponses()
+        {
             var searchChatResponses = _chatRepository.getAllAiResponses;
 
-            if (!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(searchChatResponses);
             }
 
@@ -174,11 +300,13 @@ namespace testingStuff.Controllers
 
         #region getAllUserPrompts
         [HttpGet]
-        [Route("UserPrompts")] 
-        public async Task<ActionResult<IEnumerable<UserPrompt>>> getUserPrompts(){
+        [Route("UserPrompts")]
+        public async Task<ActionResult<IEnumerable<UserPrompt>>> getUserPrompts()
+        {
             var searchUserPrompts = _chatRepository.getAllUserPrompts();
 
-            if (!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(searchUserPrompts);
             }
 
@@ -188,18 +316,20 @@ namespace testingStuff.Controllers
 
         #region getChatById
         [HttpGet]
-        [Route("{id:guid}")]
-        public async Task<ActionResult<Chat>> getChatById([FromRoute] Guid id){
+        [Route("chat/{id:guid}")]
+        public async Task<ActionResult<Chat>> getChatById([FromRoute] Guid id)
+        {
             var searchChat = _chatRepository.getChatByConvoId(id);
 
-            if (searchChat == null){
+            if (searchChat == null)
+            {
                 return NotFound();
             }
-            
+
             return Ok(searchChat);
         }
         #endregion
-    
+
 
     }
 }

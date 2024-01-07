@@ -10,9 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddDbContext<DbDataContext>(opt =>
-    opt.UseInMemoryDatabase("Users"));
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+var dbConnectionString = builder.Configuration.GetConnectionString("Default");
+
+builder.Services.AddDbContext<DbDataContext>(opt => opt.UseMySql(
+    dbConnectionString, ServerVersion.AutoDetect(dbConnectionString))); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 

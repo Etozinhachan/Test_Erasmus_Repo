@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\student\\meow\\AI\\testingStuff\\testingStuff.csproj": {}
+    "C:\\Users\\psubg\\OneDrive\\Documentos\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj": {}
   },
   "projects": {
-    "C:\\Users\\student\\meow\\AI\\testingStuff\\testingStuff.csproj": {
+    "C:\\Users\\psubg\\OneDrive\\Documentos\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\student\\meow\\AI\\testingStuff\\testingStuff.csproj",
+        "projectUniqueName": "C:\\Users\\psubg\\OneDrive\\Documentos\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj",
         "projectName": "testingStuff",
-        "projectPath": "C:\\Users\\student\\meow\\AI\\testingStuff\\testingStuff.csproj",
-        "packagesPath": "C:\\Users\\student\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\student\\meow\\AI\\testingStuff\\obj\\",
+        "projectPath": "C:\\Users\\psubg\\OneDrive\\Documentos\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj",
+        "packagesPath": "C:\\Users\\psubg\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\psubg\\OneDrive\\Documentos\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\student\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\psubg\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -52,27 +58,27 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.14, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
@@ -81,6 +87,10 @@
             "OpenAI": {
               "target": "Package",
               "version": "[1.10.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

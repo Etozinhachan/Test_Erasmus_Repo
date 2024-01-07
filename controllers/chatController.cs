@@ -14,13 +14,13 @@ namespace testingStuff.Controllers
     {
         #region constructor thingies
         private readonly IChatRepository _chatRepository;
-        private readonly IMapper _mapper;
+        private readonly IMapper? _mapper;
         private readonly int characterLimitPerResponse = 25;
 
-        public chatController(IChatRepository chatRepository, IMapper mapper)
+        public chatController(IChatRepository chatRepository/*, IMapper mapper*/)
         {
             _chatRepository = chatRepository;
-            _mapper = mapper;
+            /*_mapper = mapper;*/
         }
         #endregion
 
@@ -115,13 +115,13 @@ namespace testingStuff.Controllers
             {
                 id = Guid.NewGuid(),
                 conversation_id = newChat.id,
-                user_id = userPromptDTO.user_id,
                 prompt = userPromptDTO.prompt
             };
 
             _chatRepository.AddChat(newChat);
             _chatRepository.AddUserPrompt(userPrompt);
 
+/*
             var (response, is_final) = generateAiResponse(newChat.id);
 
             var chatResponse = new ChatSucessfullResponse
@@ -131,16 +131,16 @@ namespace testingStuff.Controllers
                 response = response,
                 is_final = is_final
             };
-
+*/
             
 
             /* 
                         newChat.chatPrompts.Add(chatResponse);
                         newChat.userPrompts.Add(userPrompt);
              */
-            _chatRepository.AddAiResponse(chatResponse);
+ //           _chatRepository.AddAiResponse(chatResponse);
 
-            return Ok(newChat);
+            return CreatedAtAction(nameof(getChatById), new { id = newChat.id }, newChat);
 
         }
 
@@ -150,6 +150,7 @@ namespace testingStuff.Controllers
         #region continueChatPut
         [HttpPut]
         [Route("{conversation_id:guid}")]
+        [ActionName("")]
         public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPromptDTODTO userPromptDTODTO)
         {
 
@@ -196,7 +197,6 @@ namespace testingStuff.Controllers
             {
                 id = Guid.NewGuid(),
                 conversation_id = conversation_id,
-                user_id = _chatRepository.getChatByConvoId(conversation_id).user_id,
                 prompt = userPromptDTODTO.prompt
             };
             _chatRepository.AddUserPrompt(userPrompt);

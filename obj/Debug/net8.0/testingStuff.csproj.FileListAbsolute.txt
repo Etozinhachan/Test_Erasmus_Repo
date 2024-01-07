@@ -520,3 +520,5 @@ C:\Users\student\meow\AI\testingStuff\bin\Debug\net8.0\AutoMapper.Extensions.Mic
 C:\Users\student\meow\AI\testingStuff\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\student\meow\AI\testingStuff\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\student\meow\AI\testingStuff\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\ESL1449\Documents\MEGA\erasmus_project\Test_Erasmus_Repo\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\ESL1449\Documents\MEGA\erasmus_project\Test_Erasmus_Repo\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll

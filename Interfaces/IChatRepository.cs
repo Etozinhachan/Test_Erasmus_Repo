@@ -16,6 +16,7 @@ public interface IChatRepository
     public void AddAiResponse(ChatSucessfullResponse AiResponse);
     public void AddChat(Chat chat);
     public void aiResponseModified(ChatSucessfullResponse chatResponse);
+    public void deleteChat(Chat chat);
     public void SaveChanges();
 
 

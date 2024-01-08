@@ -20,7 +20,8 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.0",
           "OpenAI": "1.10.0",
           "Pomelo.EntityFrameworkCore.MySql": "7.0.0",
-          "Swashbuckle.AspNetCore": "6.4.0"
+          "Swashbuckle.AspNetCore": "6.4.0",
+          "System.IdentityModel.Tokens.Jwt": "7.0.3"
         },
         "runtime": {
           "testingStuff.dll": {}

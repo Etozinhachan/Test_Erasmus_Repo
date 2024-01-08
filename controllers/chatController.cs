@@ -1,27 +1,36 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using testingStuff.data;
 using testingStuff.helper;
+using testingStuff.Identity;
 using testingStuff.Interfaces;
 using testingStuff.models;
 
 namespace testingStuff.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]/conversation")]
     [ApiController]
     public class chatController : ControllerBase
     {
         #region constructor thingies
         private readonly IChatRepository _chatRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _config;
         private readonly IMapper? _mapper;
         private readonly int characterLimitPerResponse = 25;
 
-        public chatController(IChatRepository chatRepository/*, IMapper mapper*/)
+
+        public chatController(IChatRepository chatRepository, IUserRepository userRepository, IConfiguration configuration/*, IMapper mapper*/)
         {
             _chatRepository = chatRepository;
+            _userRepository = userRepository;
+            _config = configuration;
             /*_mapper = mapper;*/
         }
         #endregion
@@ -84,10 +93,23 @@ namespace testingStuff.Controllers
         #endregion
 
         #region startChat
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Chat>> createChat(UserPromptDTO userPromptDTO)
         {
-            if (userPromptDTO == null || userPromptDTO.prompt.Length == 0)
+            /*
+            var myCustomJwtStringB = Request.Headers.Where(h => h.Key == "Authorization").FirstOrDefault().Value.ToString();
+            var myCustomJwtString = myCustomJwtStringB?.Substring("Bearer ".Length);
+            var myCustomJwt = HelperMethods.ConvertJwtStringToJwtSecurityToken(myCustomJwtString);
+            var myCustomJwtData = HelperMethods.DecodeJwt(myCustomJwt);
+            */
+
+
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_config, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (userPromptDTO == null || userPromptDTO.prompt.Length == 0 || !_userRepository.UserExists(userId))
             {
                 return BadRequest(new ChatBadResponse
                 {
@@ -110,18 +132,18 @@ namespace testingStuff.Controllers
             var newChat = new Chat
             {
                 id = Guid.NewGuid(),
-                user_id = userPromptDTO.user_id,
+                user_id = userId,
             };
-            /*
+            
             var userPrompt = new UserPrompt
             {
                 id = Guid.NewGuid(),
                 conversation_id = newChat.id,
                 prompt = userPromptDTO.prompt
-            };*/
+            };
 
             _chatRepository.AddChat(newChat);
-            //_chatRepository.AddUserPrompt(userPrompt);
+            _chatRepository.AddUserPrompt(userPrompt);
 
 /*
             var (response, is_final) = generateAiResponse(newChat.id);
@@ -153,7 +175,7 @@ namespace testingStuff.Controllers
         [HttpPut]
         [Route("{conversation_id:guid}")]
         [ActionName("")]
-        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPromptDTODTO userPromptDTODTO)
+        public async Task<ActionResult<Chat>> continueChatPut([FromRoute] Guid conversation_id, [FromBody] UserPromptDTO userPromptDTODTO)
         {
 
             if (!_chatRepository.chatExists(conversation_id))
@@ -161,9 +183,11 @@ namespace testingStuff.Controllers
                 NotFound();
             }
 
-            var chat = _chatRepository.getChatByConvoId(conversation_id);
+            var chat = _chatRepository.getChatByConvoId(conversation_id)!;
 
-            if (userPromptDTODTO.prompt.Length == 0 || !_chatRepository.isFinal(_chatRepository.getLastAiResponse(chat)))
+            var lastAiResponse = _chatRepository.getLastAiResponse(chat)!;
+
+            if (userPromptDTODTO.prompt.Length == 0 || !_chatRepository.isFinal(lastAiResponse))
             {
                 return BadRequest(new ChatBadResponse
                 {
@@ -190,7 +214,8 @@ namespace testingStuff.Controllers
                 conversation_id = conversation_id,
                 id = Guid.NewGuid(),
                 is_final = false,
-                response = ""
+                response = "",
+                response_number = lastAiResponse.response_number + 1
             };
 
             _chatRepository.AddAiResponse(chatResponse);
@@ -199,7 +224,8 @@ namespace testingStuff.Controllers
             {
                 id = Guid.NewGuid(),
                 conversation_id = conversation_id,
-                prompt = userPromptDTODTO.prompt
+                prompt = userPromptDTODTO.prompt,
+                prompt_number = _chatRepository.getLastUserPrompt(chat).prompt_number + 1
             };
             _chatRepository.AddUserPrompt(userPrompt);
 
@@ -221,12 +247,29 @@ namespace testingStuff.Controllers
         {
             if (!_chatRepository.chatExists(conversation_id))
             {
-                NotFound();
+                return NotFound();
+            }
+
+            if (_chatRepository.getLastUserPrompt(_chatRepository.getChatByConvoId(conversation_id)) == null){
+
+                _chatRepository.deleteChat(_chatRepository.getChatByConvoId(conversation_id));
+                return NotFound();
             }
 
             var chat = _chatRepository.getChatByConvoId(conversation_id);
+            ChatSucessfullResponse? lastAiResponse = _chatRepository.getLastAiResponse(chat);
 
-            if (_chatRepository.isFinal(_chatRepository.getLastAiResponse(chat)))
+            if (lastAiResponse == null){
+                lastAiResponse = new ChatSucessfullResponse{
+                    response = "",
+                    conversation_id = conversation_id,
+                    id = Guid.NewGuid(),
+                    is_final = false
+                };
+                _chatRepository.AddAiResponse(lastAiResponse);
+            }
+
+            if (_chatRepository.isFinal(lastAiResponse) || lastAiResponse == null)
             {
                 return BadRequest(new ChatBadResponse
                 {
@@ -266,6 +309,24 @@ namespace testingStuff.Controllers
             return Ok(_chatRepository.getChatByConvoId(conversation_id));
         }
 
+        #endregion
+
+        #region DeleteChatMethod
+        [Authorize(Policy = IdentityData.AdminUserPolicyName)]
+        [HttpDelete]
+        [Route("{chat_id:guid}")]
+        public async Task<ActionResult> deleteChat([FromRoute] Guid chat_id){
+
+            Chat? chat = _chatRepository.getChatByConvoId(chat_id);
+
+            if (chat == null){
+                return NotFound();
+            }
+
+            _chatRepository.deleteChat(chat);
+
+            return NoContent();
+        }
         #endregion
 
         #region getAllChatsFromAUser
@@ -331,7 +392,6 @@ namespace testingStuff.Controllers
             return Ok(searchChat);
         }
         #endregion
-
 
     }
 }

@@ -31,11 +31,11 @@ public class UserRepository : IUserRepository
 
     public bool UserExists(Guid id)
     {
-        throw new NotImplementedException();
+        return _context.Users.Any(u => u.id == id);
     }
 
     public bool UserExists(string username)
     {
-        throw new NotImplementedException();
+        return _context.Users.Any(u => u.UserName == username);
     }
 }

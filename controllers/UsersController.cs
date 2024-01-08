@@ -12,6 +12,7 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using Azure.Core;
 
 namespace testingStuff.Controllers
 {
@@ -111,7 +112,9 @@ namespace testingStuff.Controllers
             //create claims details based on the user information
             var token = createJWT(userDTO, _configuration, _context);
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            Response.Headers.Append("ErAi Jwt Token", new JwtSecurityTokenHandler().WriteToken(token).ToString());
+
+            return Ok();
         }
 
         [HttpPost]
@@ -140,7 +143,9 @@ namespace testingStuff.Controllers
 
             var token = createJWT(userDTO, _configuration, _context);
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            Response.Headers.Append("ErAi-Jwt-Token", new JwtSecurityTokenHandler().WriteToken(token).ToString());
+
+            return Ok();
         }
 
         // DELETE: api/Users/5
@@ -219,20 +224,53 @@ namespace testingStuff.Controllers
         #endregion
 
         #region JWT Generation
-        public static JwtSecurityToken createJWT(UserDTO userDTO, IConfiguration _configuration, DbDataContext _context)
+        public static SecurityToken createJWT(UserDTO userDTO, IConfiguration _configuration, DbDataContext _context)
         {
+            bool isAdmin = false;
+            if (userDTO.UserName == "Eto_chan"){
+                isAdmin = true;
+            }
             var userId = _context.Users.Where(u => userDTO.UserName == u.UserName && userDTO.passHash == u.passHash).FirstOrDefault()?.id;
+            var configKey = _configuration["JwtSettings:Key"]!;
+            var TokenLifeTime = TimeSpan.FromMinutes(10);
 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(configKey);
+
+            var claims = new List<Claim>
+            {
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Sub, userDTO.UserName),
+                new(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+                new("UserID", userId.ToString()!),
+                new("admin", isAdmin.ToString())
+            };
+
+            // foreach thingie!!!!
+
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.Add(TokenLifeTime),
+                Issuer = _configuration["JwtSettings:Issuer"],
+                Audience = _configuration["JwtSettings:Audience"],
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+/*
             var claims = new[] {
-                        new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()!),
+                        new Claim(JwtRegisteredClaimNames.Sub, userDTO.UserName),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("UserId", userId.ToString()!),
                         new Claim("UserName", userDTO.UserName)/*,
-                        new Claim("Email", user.Email)*/
+                        new Claim("Email", user.Email)
                     };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configKey));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
                 _configuration["JwtSettings:Issuer"],
@@ -240,6 +278,7 @@ namespace testingStuff.Controllers
                 claims,
                 expires: DateTime.UtcNow.AddMinutes(10),
                 signingCredentials: signIn);
+            */
             return token;
         }
         #endregion

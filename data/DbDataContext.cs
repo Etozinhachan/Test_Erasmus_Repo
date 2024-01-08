@@ -35,7 +35,14 @@ public class DbDataContext : DbContext
             .HasForeignKey(e => e.conversation_id)
             .HasPrincipalKey(e => e.id);
 
+        modelBuilder.Entity<UserPrompt>()
+            .Property(u => u.prompt_number)
+            .ValueGeneratedOnAdd();
         
+        modelBuilder.Entity<ChatSucessfullResponse>()
+            .Property(csr => csr.response_number)
+            .ValueGeneratedOnAdd();
+
         base.OnModelCreating(modelBuilder); 
     }
 }

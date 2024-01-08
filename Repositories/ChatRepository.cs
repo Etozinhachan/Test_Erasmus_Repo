@@ -24,11 +24,11 @@ public class ChatRepository : IChatRepository
     }
     public ChatSucessfullResponse? getLastAiResponse(Chat chat)
     {
-        return chat.chatPrompts.LastOrDefault();
+        return chat.chatPrompts.OrderBy(csr => csr.response_number).LastOrDefault();
     }
     public UserPrompt getLastUserPrompt(Chat chat)
     {
-        return chat.userPrompts.LastOrDefault();
+        return chat.userPrompts.OrderBy(up => up.prompt_number).LastOrDefault();
     }
     public Chat? getChatByConvoId(Guid id)
     {
@@ -36,11 +36,11 @@ public class ChatRepository : IChatRepository
     }
 
     public ICollection<UserPrompt> getAllUserPrompts(){
-        return _context.userPrompts.OrderBy(up => up.id).ToList();
+        return _context.userPrompts.OrderBy(up => up.prompt_number).ToList();
     }
 
     public ICollection<ChatSucessfullResponse> getAllAiResponses(){
-        return _context.AiResponses.OrderBy(csr => csr.id).ToList();
+        return _context.AiResponses.OrderBy(csr => csr.response_number).ToList();
     }
 
     public ICollection<Chat> getAllUserChats(Guid user_id){
@@ -68,6 +68,12 @@ public class ChatRepository : IChatRepository
     public void aiResponseModified(ChatSucessfullResponse chatResponse)
     {
         _context.Entry(chatResponse).State = EntityState.Modified;
+        SaveChanges();
+    }
+
+    public void deleteChat(Chat chat)
+    {
+        _context.Remove(chat);
         SaveChanges();
     }
 

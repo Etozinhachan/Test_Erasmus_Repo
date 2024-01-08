@@ -9,5 +9,7 @@ public class ChatSucessfullResponse{
     public required string response { get; set; }
     public bool is_final { get; set; }
     [JsonIgnore]
+    public int response_number { get; set; }
+    [JsonIgnore]
     public Chat? chat { get; set; }
 }

@@ -9,6 +9,9 @@ using testingStuff.data;
 using testingStuff.models;
 using System.Security.Cryptography;
 using System.Text;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace testingStuff.Controllers
 {
@@ -17,10 +20,12 @@ namespace testingStuff.Controllers
     public class UsersController : ControllerBase
     {
         private readonly DbDataContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UsersController(DbDataContext context)
+        public UsersController(DbDataContext context, IConfiguration config)
         {
             _context = context;
+            _configuration = config;
         }
 
         // GET: api/Users
@@ -47,7 +52,7 @@ namespace testingStuff.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> PutUser([FromRoute]Guid id, UserDTODTO userDTODTO)
+        public async Task<IActionResult> PutUser([FromRoute] Guid id, UserDTODTO userDTODTO)
         {
             if (id != userDTODTO.id)
             {
@@ -56,7 +61,8 @@ namespace testingStuff.Controllers
 
             (string hash, string salt) = HashPassword(userDTODTO.passHash);
 
-            var user = new User{
+            var user = new User
+            {
                 id = id,
                 UserName = userDTODTO.UserName,
                 passHash = hash,
@@ -90,6 +96,7 @@ namespace testingStuff.Controllers
         [Route("register")]
         public async Task<ActionResult<User>> registerUser(UserDTO userDTO)
         {
+            
             (string hash, string salt) = HashPassword(userDTO.passHash);
             var user = new User{
                 id = Guid.NewGuid(),
@@ -99,8 +106,12 @@ namespace testingStuff.Controllers
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+            
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
+            //create claims details based on the user information
+            var token = createJWT(userDTO, _configuration, _context);
+
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         [HttpPost]
@@ -108,7 +119,10 @@ namespace testingStuff.Controllers
         public async Task<ActionResult<User>> loginUser(UserDTO userDTO)
         {
 
-            if (!UserExists(userDTO.UserName)){
+           // if (Request.Headers.TryGetValue("", out var testId))
+
+            if (!UserExists(userDTO.UserName))
+            {
                 return NotFound();
             }
 
@@ -116,14 +130,17 @@ namespace testingStuff.Controllers
 
             string hash = HashPassword(userDTO.passHash, salt);
             userDTO.passHash = hash;
-            
+
             var searchUser = _context.Users.ToList().Find(u => u.UserName == userDTO.UserName && u.passHash == userDTO.passHash);
-            
-            if (searchUser == null){
+
+            if (searchUser == null)
+            {
                 return NotFound();
             }
 
-            return Ok(searchUser);
+            var token = createJWT(userDTO, _configuration, _context);
+
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         // DELETE: api/Users/5
@@ -155,7 +172,8 @@ namespace testingStuff.Controllers
         #region getUserByUsername
         [HttpGet]
         [Route("{username}")]
-        public async Task<ActionResult<User>> getUserByUsername([FromRoute] string username){
+        public async Task<ActionResult<User>> getUserByUsername([FromRoute] string username)
+        {
             return Ok(_context.Users.ToList().Find(u => u.UserName == username));
         }
         #endregion
@@ -182,9 +200,6 @@ namespace testingStuff.Controllers
 
                 return (hash, salt);
             }
-            
-
-        
         }
 
         public static string HashPassword(string password, string salt)
@@ -198,9 +213,35 @@ namespace testingStuff.Controllers
 
                 return hash;
             }
-        
+
         }
 
+        #endregion
+
+        #region JWT Generation
+        public static JwtSecurityToken createJWT(UserDTO userDTO, IConfiguration _configuration, DbDataContext _context)
+        {
+            var userId = _context.Users.Where(u => userDTO.UserName == u.UserName && userDTO.passHash == u.passHash).FirstOrDefault()?.id;
+
+            var claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()!),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim("UserId", userId.ToString()!),
+                        new Claim("UserName", userDTO.UserName)/*,
+                        new Claim("Email", user.Email)*/
+                    };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                _configuration["JwtSettings:Issuer"],
+                _configuration["JwtSettings:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(10),
+                signingCredentials: signIn);
+            return token;
+        }
         #endregion
     }
 }

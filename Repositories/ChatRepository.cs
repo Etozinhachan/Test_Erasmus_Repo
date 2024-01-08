@@ -30,7 +30,7 @@ public class ChatRepository : IChatRepository
     {
         return chat.userPrompts.LastOrDefault();
     }
-    public Chat getChatByConvoId(Guid id)
+    public Chat? getChatByConvoId(Guid id)
     {
         return _context.Chats.Where(c => c.id == id).Include(up => up.userPrompts).Include(cps => cps.chatPrompts).FirstOrDefault();
     }

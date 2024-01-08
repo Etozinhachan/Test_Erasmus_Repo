@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
@@ -8,6 +9,7 @@ using testingStuff.models;
 
 namespace testingStuff.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/conversation")]
     [ApiController]
     public class chatController : ControllerBase
@@ -110,16 +112,16 @@ namespace testingStuff.Controllers
                 id = Guid.NewGuid(),
                 user_id = userPromptDTO.user_id,
             };
-
+            /*
             var userPrompt = new UserPrompt
             {
                 id = Guid.NewGuid(),
                 conversation_id = newChat.id,
                 prompt = userPromptDTO.prompt
-            };
+            };*/
 
             _chatRepository.AddChat(newChat);
-            _chatRepository.AddUserPrompt(userPrompt);
+            //_chatRepository.AddUserPrompt(userPrompt);
 
 /*
             var (response, is_final) = generateAiResponse(newChat.id);

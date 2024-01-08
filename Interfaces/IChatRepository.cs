@@ -8,7 +8,7 @@ public interface IChatRepository
     public bool isFinal(ChatSucessfullResponse aiResponse);
     public ChatSucessfullResponse? getLastAiResponse(Chat chat);
     public UserPrompt getLastUserPrompt(Chat chat);
-    public Chat getChatByConvoId(Guid id);
+    public Chat? getChatByConvoId(Guid id);
     public ICollection<UserPrompt> getAllUserPrompts();
     public ICollection<ChatSucessfullResponse> getAllAiResponses();
     public ICollection<Chat> getAllUserChats(Guid user_id);

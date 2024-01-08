@@ -7,5 +7,6 @@ public class UserPromptDTO{
 
     public required Guid user_id { get; set; }
     public required string prompt { get; set; }
+    
 
 }

@@ -1,15 +1,38 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using testingStuff.data;
 using testingStuff.Interfaces;
 using testingStuff.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 // Add services to the container.
 
+
 builder.Services.AddControllers();
-builder.Services.AddScoped<IChatRepository, ChatRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+
+        ValidIssuer = config["JwtSettings:Issuer"],
+        ValidAudience = config["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey
+            (Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddTransient<IChatRepository, ChatRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var dbConnectionString = builder.Configuration.GetConnectionString("Default");
@@ -44,12 +67,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-
-app.UseAuthorization();
 
 app.MapControllers();
 

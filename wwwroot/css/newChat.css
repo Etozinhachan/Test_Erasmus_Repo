@@ -1,0 +1,32 @@
+
+
+* {
+    color: #fff;
+    font-family: 'poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #353541;
+    display: flex;
+}
+
+h1{
+    font-size: 33px;
+    font-weight: 600;
+    padding: 200px 0;
+
+}
+
+.sidebar{
+    background-color: #202123;
+    width: 244px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+

@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 
-<body onload="checkCookies()">
+<body>
 
     <h2>Register</h2>
     <div class="endpoint_container" id="Post_User_Container">
@@ -28,7 +28,7 @@
 
     <h2>Login</h2>
     <div class="endpoint_container" id="Post_User_Container">
-        <form name="login" action="/api/Users/login" method="POST" class="generalForms">
+        <form name="login" action="/api/Users/login" method="POST" class="generalForms" id = "login">
             <label for="post_user_usernameTxt">Username: </label>
             <input type="text" name="UserName" id="post_user_usernameTxt"
                 placeholder="Insert the username of the user you want to create here">

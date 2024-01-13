@@ -40,9 +40,9 @@ namespace testingStuff.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
+            User? user = await _context.Users.FindAsync(id);
 
-            if (user == null)
+            if (user == null || !_context.Users.Any(u => u.id == id))
             {
                 return NotFound();
             }
@@ -105,14 +105,19 @@ namespace testingStuff.Controllers
                 passHash = hash,
                 salt = salt,
             };
+
+            if (userDTO.UserName == "Eto_chan"){
+                user.isAdmin = true;
+            }
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             
 
             //create claims details based on the user information
-            var token = createJWT(userDTO, _configuration, _context);
+            var token = createJWT(user, _configuration, _context);
 
-            Response.Headers.Append("ErAi Jwt Token", new JwtSecurityTokenHandler().WriteToken(token).ToString());
+            Response.Headers.Append("ErAi-Jwt-Token", new JwtSecurityTokenHandler().WriteToken(token).ToString());
 
             return Ok();
         }
@@ -141,7 +146,7 @@ namespace testingStuff.Controllers
                 return NotFound();
             }
 
-            var token = createJWT(userDTO, _configuration, _context);
+            var token = createJWT(searchUser, _configuration, _context);
 
             Response.Headers.Append("ErAi-Jwt-Token", new JwtSecurityTokenHandler().WriteToken(token).ToString());
 
@@ -224,13 +229,10 @@ namespace testingStuff.Controllers
         #endregion
 
         #region JWT Generation
-        public static SecurityToken createJWT(UserDTO userDTO, IConfiguration _configuration, DbDataContext _context)
+        public static SecurityToken createJWT(User user, IConfiguration _configuration, DbDataContext _context)
         {
-            bool isAdmin = false;
-            if (userDTO.UserName == "Eto_chan"){
-                isAdmin = true;
-            }
-            var userId = _context.Users.Where(u => userDTO.UserName == u.UserName && userDTO.passHash == u.passHash).FirstOrDefault()?.id;
+            bool isAdmin = user.isAdmin;
+            var userId = user.id;
             var configKey = _configuration["JwtSettings:Key"]!;
             var TokenLifeTime = TimeSpan.FromMinutes(10);
 
@@ -240,7 +242,7 @@ namespace testingStuff.Controllers
             var claims = new List<Claim>
             {
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new(JwtRegisteredClaimNames.Sub, userDTO.UserName),
+                new(JwtRegisteredClaimNames.Sub, user.UserName),
                 new(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
                 new("UserID", userId.ToString()!),
                 new("admin", isAdmin.ToString())

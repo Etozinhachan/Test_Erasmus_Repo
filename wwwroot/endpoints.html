@@ -6,6 +6,15 @@
     <title>text_generation_ai</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
+<script type="importmap">
+    {
+      "imports": {
+        "jwt-decode": "./node_modules/jwt-decode/build/esm/index.js"
+      }
+    }
+  </script>
+
 <body>
     <h1>Testing stuff</h1>
 
@@ -81,15 +90,17 @@
 
         <h2>Create a chat</h2>
         <div class="endpoint_container" id="Post_User_Container">
-            <form name="addUser" action="/api/chat/conversation" method="POST" class="generalForms">
-                <label for="post_chat_promptTxt">Username: </label>
+            <form name="createChat" action="/api/chat/conversation" method="POST" class="generalForms">
+                <label for="post_chat_promptTxt">Prompt: </label>
                 <input type="text" name="prompt" id="post_chat_promptTxt" placeholder="Insert a prompt to create a chat here">
+                <br>
+                <input type="submit" value="create chat">
             </form>
         </div>
         
         <br>
 
     </div>
-    <script src="./js/script.js"></script>
+    <script src="./js/script.js" type="module"></script>
 </body>
 </html>

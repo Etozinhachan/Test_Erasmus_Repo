@@ -9,4 +9,6 @@ public interface IUserRepository
     public User? getUser(string username);
     public bool UserExists(Guid id);
     public bool UserExists(string username);
+    public bool isAdmin(Guid user_id);
+    public bool isReallyAdmin(Guid user_id, bool isAdminJwtValue);
 }

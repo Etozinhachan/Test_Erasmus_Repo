@@ -10,7 +10,9 @@ public interface IChatRepository
     public UserPrompt getLastUserPrompt(Chat chat);
     public Chat? getChatByConvoId(Guid id);
     public ICollection<UserPrompt> getAllUserPrompts();
+    public ICollection<UserPrompt> getAllUserPrompts(Guid user_id);
     public ICollection<ChatSucessfullResponse> getAllAiResponses();
+    public ICollection<ChatSucessfullResponse> getAllAiResponses(Guid user_id);
     public ICollection<Chat> getAllUserChats(Guid user_id);
     public void AddUserPrompt(UserPrompt userPrompt);
     public void AddAiResponse(ChatSucessfullResponse AiResponse);

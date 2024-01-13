@@ -29,6 +29,17 @@ public class UserRepository : IUserRepository
         return _context.Users.Where(u => u.UserName == username).FirstOrDefault();
     }
 
+    public bool isAdmin(Guid user_id)
+    {
+        return getUser(user_id).isAdmin;
+    }
+
+    public bool isReallyAdmin(Guid user_id, bool isAdminJwtValue)
+    {
+        var userHasAdmin = isAdmin(user_id);
+        return (!userHasAdmin && isAdminJwtValue) || (userHasAdmin && !isAdminJwtValue) || (!userHasAdmin && !isAdminJwtValue);
+    }
+
     public bool UserExists(Guid id)
     {
         return _context.Users.Any(u => u.id == id);

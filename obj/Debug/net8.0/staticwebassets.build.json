@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "iH9EMWtUYSQ7L1oPPLTpvC+bAwqdHOX8sZjbR7g9rHs=",
+  "Hash": "EBtiA9u9yZ/0fxlCZvan4XKLTlgDCP3tJew6ds4U34s=",
   "Source": "testingStuff",
   "BasePath": "_content/testingStuff",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "testingStuff\\wwwroot",
       "Source": "testingStuff",
-      "ContentRoot": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\css\\style.css",
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\style.css",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "css/style.css",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\css\\style.css"
     },
     {
-      "Identity": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\endpoints.html",
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\endpoints.html",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "endpoints.html",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\endpoints.html"
     },
     {
-      "Identity": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\index.html",
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\index.html",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -74,10 +74,10 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\login.js",
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\login.js",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "js/login.js",
       "AssetKind": "All",
@@ -93,10 +93,10 @@
       "OriginalItemSpec": "wwwroot\\js\\login.js"
     },
     {
-      "Identity": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\script.js",
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\script.js",
       "SourceId": "testingStuff",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
       "BasePath": "_content/testingStuff",
       "RelativePath": "js/script.js",
       "AssetKind": "All",
@@ -110,6 +110,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\script.js"
+    },
+    {
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\package-lock.json",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "package-lock.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\package-lock.json"
+    },
+    {
+      "Identity": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\package.json",
+      "SourceId": "testingStuff",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\",
+      "BasePath": "_content/testingStuff",
+      "RelativePath": "package.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\package.json"
     }
   ]
 }

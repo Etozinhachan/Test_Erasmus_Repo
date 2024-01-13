@@ -786,3 +786,4 @@ C:\Users\psubg\OneDrive\Documentos\C# Projects\ErasmusProjectAPI\Test_Erasmus_Re
 C:\Users\psubg\OneDrive\Documentos\C# Projects\ErasmusProjectAPI\Test_Erasmus_Repo\obj\Debug\net8.0\testingStuff.csproj.CopyComplete
 C:\Users\psubg\OneDrive\Documentos\C# Projects\ErasmusProjectAPI\Test_Erasmus_Repo\obj\Debug\net8.0\testingStuff.genruntimeconfig.cache
 C:\Users\psubg\OneDrive\Documentos\C# Projects\ErasmusProjectAPI\Test_Erasmus_Repo\obj\Debug\net8.0\ref\testingStuff.dll
+C:\Users\ESL1449\Documents\MEGA\erasmus_project\Test_Erasmus_Repo\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

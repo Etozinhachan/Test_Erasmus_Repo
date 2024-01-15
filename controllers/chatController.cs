@@ -190,6 +190,9 @@ namespace testingStuff.Controllers
                  */
                 //           _chatRepository.AddAiResponse(chatResponse);
 
+                newChat.chat_number = _chatRepository.getAllUserChats(userId).Count - 1;
+                _chatRepository.chatModified(newChat);
+
                 return CreatedAtAction(nameof(getChatById), new { id = newChat.id }, newChat);
             }
             catch (Exception)

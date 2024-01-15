@@ -54,7 +54,7 @@ public class ChatRepository : IChatRepository
     }
 
     public ICollection<Chat> getAllUserChats(Guid user_id){
-        return _context.Chats.Where(u => u.user.id == user_id).Include(up => up.userPrompts.OrderBy(x => x.prompt_number)).Include(cps => cps.chatPrompts.OrderBy(x => x.response_number)).ToList();
+        return _context.Chats.Where(u => u.user.id == user_id).OrderByDescending(x => x.chat_number).Include(up => up.userPrompts.OrderBy(x => x.prompt_number)).Include(cps => cps.chatPrompts.OrderBy(x => x.response_number)).ToList();
     }
 
     public void AddUserPrompt(UserPrompt userPrompt)
@@ -78,6 +78,12 @@ public class ChatRepository : IChatRepository
     public void aiResponseModified(ChatSucessfullResponse chatResponse)
     {
         _context.Entry(chatResponse).State = EntityState.Modified;
+        SaveChanges();
+    }
+
+    public void chatModified(Chat chat)
+    {
+        _context.Entry(chat).State = EntityState.Modified;
         SaveChanges();
     }
 

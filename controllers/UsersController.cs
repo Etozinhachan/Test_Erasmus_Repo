@@ -60,6 +60,10 @@ namespace testingStuff.Controllers
                 return BadRequest();
             }
 
+            if (existsUserWithSameUsername(userDTODTO.UserName, _context)){
+                return BadRequest("A user with that username already exists");
+            }
+
             (string hash, string salt) = HashPassword(userDTODTO.passHash);
 
             var user = new User
@@ -98,6 +102,10 @@ namespace testingStuff.Controllers
         public async Task<ActionResult<User>> registerUser(UserDTO userDTO)
         {
             
+            if (existsUserWithSameUsername(userDTO.UserName, _context)){
+                return BadRequest("A user with that username already exists");
+            }
+
             (string hash, string salt) = HashPassword(userDTO.passHash);
             var user = new User{
                 id = Guid.NewGuid(),
@@ -282,6 +290,12 @@ namespace testingStuff.Controllers
                 signingCredentials: signIn);
             */
             return token;
+        }
+        #endregion
+
+        #region  helper
+        public static bool existsUserWithSameUsername(string username, DbDataContext _context){
+            return _context.Users.Any(u => u.UserName == username);
         }
         #endregion
     }

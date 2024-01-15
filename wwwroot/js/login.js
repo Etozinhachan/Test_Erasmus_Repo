@@ -134,12 +134,12 @@ var handleFormSubmit = async (event) => {
             console.log(item);
         }); */
         form.reset()
-        await setCookie("UserName", formData.get("UserName"), {minutes: cookieDuration})
-        await setCookie("passHash", formData.get("passHash"), {minutes: cookieDuration})
         if (responseData.headers.has(jwt_token_Header)){
+            await setCookie("UserName", formData.get("UserName"), {minutes: cookieDuration})
+            await setCookie("passHash", formData.get("passHash"), {minutes: cookieDuration})
             await setCookie(jwt_token_Header, responseData.headers.get(jwt_token_Header), {minutes: cookieDuration});
         }
-        window.location.replace("http://localhost:5274/chat.html");
+        window.location.replace("http://localhost:5274/newChat.html");
     } catch (error) {
         console.error(error);
     }

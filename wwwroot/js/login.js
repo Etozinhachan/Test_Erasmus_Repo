@@ -139,7 +139,7 @@ var handleFormSubmit = async (event) => {
             await setCookie("passHash", formData.get("passHash"), {minutes: cookieDuration})
             await setCookie(jwt_token_Header, responseData.headers.get(jwt_token_Header), {minutes: cookieDuration});
         }
-        window.location.replace("http://localhost:5274/newChat.html");
+        window.location.replace("https://fakeai.onrender.com/newChat.html");
     } catch (error) {
         console.error(error);
     }

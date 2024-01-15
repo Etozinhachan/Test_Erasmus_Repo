@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj": {}
+    "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj": {}
   },
   "projects": {
-    "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj": {
+    "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj",
+        "projectUniqueName": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj",
         "projectName": "testingStuff",
-        "projectPath": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj",
-        "packagesPath": "C:\\Users\\psubg\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\obj\\",
+        "projectPath": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj",
+        "packagesPath": "C:\\Users\\ESL1449\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\psubg\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ESL1449\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,6 +39,9 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "default"
         }
       },
       "frameworks": {
@@ -83,6 +87,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.14, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.19.4, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",

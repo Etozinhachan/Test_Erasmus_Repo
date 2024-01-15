@@ -1,6 +1,6 @@
 # FAKE AI
 
-## Trying to find any interesting project? I have one (here)[https://fakeai.onrender.com/]
+## Trying to find any interesting project? I have one [here](https://fakeai.onrender.com/)
 
 ### Why was the project even created?
 

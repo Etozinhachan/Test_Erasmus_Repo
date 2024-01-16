@@ -168,6 +168,16 @@ nav {
     font-weight: 300;
 }
 
+.msg-text p{
+    overflow-x: hidden;
+    text-overflow: clip;   
+    overflow-wrap: break-word;
+    overflow: hidden;
+    word-wrap: break-word;
+    word-break: break-all;
+    /* TRIED A LOT OF OVERFLOWS JUST TO BE SURE */
+}
+
 .msg-text h2{
     font-weight: 400;
     font-size: 22px;

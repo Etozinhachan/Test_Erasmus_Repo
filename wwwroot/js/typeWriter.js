@@ -20,7 +20,7 @@ async function typeContent(elementToWrite, textToWrite) {
                 element.innerHTML = `${startingText + text}`;
                 charIndex++;
                 setTimeout(typeChar, typingSpeed)
-                await new Promise(r => setTimeout(r, timeToWait + (timeToWait/10)))
+                await new Promise(r => setTimeout(r, timeToWait + 250))
             }
         }
 

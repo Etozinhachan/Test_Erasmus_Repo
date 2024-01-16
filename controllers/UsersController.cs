@@ -13,6 +13,9 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
+using testingStuff.Interfaces;
+using testingStuff.helper;
 
 namespace testingStuff.Controllers
 {
@@ -22,11 +25,13 @@ namespace testingStuff.Controllers
     {
         private readonly DbDataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(DbDataContext context, IConfiguration config)
+        public UsersController(DbDataContext context, IConfiguration config, IUserRepository userRepository)
         {
             _context = context;
             _configuration = config;
+            _userRepository = userRepository;
         }
 
         // GET: api/Users
@@ -60,7 +65,8 @@ namespace testingStuff.Controllers
                 return BadRequest();
             }
 
-            if (existsUserWithSameUsername(userDTODTO.UserName, _context)){
+            if (existsUserWithSameUsername(userDTODTO.UserName, _context))
+            {
                 return BadRequest("A user with that username already exists");
             }
 
@@ -101,26 +107,29 @@ namespace testingStuff.Controllers
         [Route("register")]
         public async Task<ActionResult<User>> registerUser(UserDTO userDTO)
         {
-            
-            if (existsUserWithSameUsername(userDTO.UserName, _context)){
+
+            if (existsUserWithSameUsername(userDTO.UserName, _context))
+            {
                 return BadRequest("A user with that username already exists");
             }
 
             (string hash, string salt) = HashPassword(userDTO.passHash);
-            var user = new User{
+            var user = new User
+            {
                 id = Guid.NewGuid(),
                 UserName = userDTO.UserName,
                 passHash = hash,
                 salt = salt,
             };
 
-            if (userDTO.UserName == "Eto_chan"){
+            if (userDTO.UserName == "Eto_chan")
+            {
                 user.isAdmin = true;
             }
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            
+
 
             //create claims details based on the user information
             var token = createJWT(user, _configuration, _context);
@@ -135,7 +144,7 @@ namespace testingStuff.Controllers
         public async Task<ActionResult<User>> loginUser(UserDTO userDTO)
         {
 
-           // if (Request.Headers.TryGetValue("", out var testId))
+            // if (Request.Headers.TryGetValue("", out var testId))
 
             if (!UserExists(userDTO.UserName))
             {
@@ -175,6 +184,39 @@ namespace testingStuff.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("is_admin")]
+        public async Task<IActionResult> is_admin()
+        {
+
+            // configura endpoint para verificar se o user eh REALMENTE admin a partir do jwt token
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_configuration, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (!_userRepository.UserExists(userId))
+            {
+                return BadRequest(new ChatBadResponse
+                {
+                    title = "Bad Request",
+                    status = 400,
+                    detail = "The request is invalid."
+                });
+            }
+
+            var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
+            var isReallyAdmin = _userRepository.getUser(userId)!.isAdmin;
+
+            if (!_userRepository.isReallyAdmin(userId, isAdmin))
+            {
+                return Ok(false);
+            }
+
+            return Ok(true);
+
         }
 
         private bool UserExists(Guid id)
@@ -270,31 +312,32 @@ namespace testingStuff.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-/*
-            var claims = new[] {
-                        new Claim(JwtRegisteredClaimNames.Sub, userDTO.UserName),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("UserId", userId.ToString()!),
-                        new Claim("UserName", userDTO.UserName)/*,
-                        new Claim("Email", user.Email)
-                    };
+            /*
+                        var claims = new[] {
+                                    new Claim(JwtRegisteredClaimNames.Sub, userDTO.UserName),
+                                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                                    new Claim("UserId", userId.ToString()!),
+                                    new Claim("UserName", userDTO.UserName)/*,
+                                    new Claim("Email", user.Email)
+                                };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configKey));
-            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                _configuration["JwtSettings:Issuer"],
-                _configuration["JwtSettings:Audience"],
-                claims,
-                expires: DateTime.UtcNow.AddMinutes(10),
-                signingCredentials: signIn);
-            */
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configKey));
+                        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _configuration["JwtSettings:Issuer"],
+                            _configuration["JwtSettings:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddMinutes(10),
+                            signingCredentials: signIn);
+                        */
             return token;
         }
         #endregion
 
         #region  helper
-        public static bool existsUserWithSameUsername(string username, DbDataContext _context){
+        public static bool existsUserWithSameUsername(string username, DbDataContext _context)
+        {
             return _context.Users.Any(u => u.UserName == username);
         }
         #endregion

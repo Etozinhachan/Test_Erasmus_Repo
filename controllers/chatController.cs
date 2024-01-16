@@ -577,6 +577,16 @@ namespace testingStuff.Controllers
                     return NotFound();
                 }
 
+                var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_config, HttpContext);
+
+                var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+                var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
+
+                if (!((searchChat.user_id == userId) || _userRepository.isReallyAdmin(userId, isAdmin))){
+                    return Forbid();
+                }
+
                 return Ok(searchChat);
             }
             catch (Exception)

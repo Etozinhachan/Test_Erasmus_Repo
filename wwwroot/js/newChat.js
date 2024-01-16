@@ -202,6 +202,7 @@ async function getMessage() {
             response_finished_generating = false;
 
             createUserPrompt();
+            chatBoxElement.scrollTo(0, chatBoxElement.scrollHeight);
 
             disable_send_button();
             var response = await fetch('/api/chat/conversation', options)
@@ -211,12 +212,14 @@ async function getMessage() {
             if (data.userPrompts[0].prompt) {
                 if (data.userPrompts[0].prompt_number == 0) {
 
-
-                    cur_chat = updateHistory(data.id, data.userPrompts[0].prompt)
+                    if (data.id, data.userPrompts[0].prompt.length > 14){
+                        cur_chat = updateHistory(data.id, data.userPrompts[0].prompt.substring(0, 14) + '...')
+                    }else{
+                        cur_chat = updateHistory(data.id, data.userPrompts[0].prompt)
+                    }
                     in_chat = true;
                     current_chat_clicked = cur_chat;
                 }
-                chatBoxElement.scrollTo(0, chatBoxElement.scrollHeight);
                 await generateAiResponse(`${data.id}`)
                 await sleep(1000)
                 enable_send_button();
@@ -244,8 +247,12 @@ async function getMessage() {
             response_finished_generating = false;
 
             createUserPrompt();
+            chatBoxElement.scrollTo(0, chatBoxElement.scrollHeight);
 
             disable_send_button();
+
+            await sleep(5000)
+
             var response = await fetch(`/api/chat/conversation/${current_chat_clicked.id}`, options)
             var data = await response.json();
             //outputElement.textContent = data.userPrompts[0].prompt;
@@ -260,7 +267,6 @@ async function getMessage() {
                 }
 
             } */
-            chatBoxElement.scrollTo(0, chatBoxElement.scrollHeight);
             //await sleep(3000)
             await generateAiResponse(`${data.conversation_id}`)
             await sleep(5000)
@@ -397,7 +403,7 @@ function updateHistory(chat_id, title) {
     iconElement.style.position = 'absolute'
     iconElement.style.left = '8.6%'
     pElement.addEventListener('click', async () => await changeChat(pElement))
-    pElement.addEventListener('mouseenter', () => iconElement.style.display = 'inline-block')
+    pElement.addEventListener('mouseenter', async () => {iconElement.style.display = 'inline-block'})
     pElement.addEventListener('mouseleave', () => iconElement.style.display = 'none')
     iconElement.addEventListener('click', async () => { event.stopPropagation(), await deleteChat(pElement) })
 
@@ -417,11 +423,43 @@ function createUserPrompt() {
     chatBoxElement.append(userPromptElement)
 }
 
+async function hasCurrentChatPerm(jwt_user_token){
+    return await hasChatPerm(jwt_user_token, current_chat_clicked.id)
+}
+
+async function hasChatPerm(jwt_user_token, chat_id){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`
+        }
+    }
+
+    try{
+        const response = await fetch(`/api/chat/conversation/chat/${chat_id}`, options)
+        if (response.ok){
+            return true
+        }
+        return false        
+    }catch(error){
+        console.error(error)
+        return false
+    }
+}
+
+function isAdmin(jwt_user_token){
+
+}
+
 async function loadChats() {
     const chats = await getChats()
     //console.log('meow')
     chats.forEach(chat => {
-        updateHistory(chat.id, chat.userPrompts[0].prompt)
+        if(chat.userPrompts[0].prompt.length > 14){
+            updateHistory(chat.id, chat.userPrompts[0].prompt.substring(0, 14) + '...')
+        }else{
+            updateHistory(chat.id, chat.userPrompts[0].prompt)
+        }
     });
 }
 

@@ -37,7 +37,7 @@ public class UserRepository : IUserRepository
     public bool isReallyAdmin(Guid user_id, bool isAdminJwtValue)
     {
         var userHasAdmin = isAdmin(user_id);
-        return (!userHasAdmin && isAdminJwtValue) || (userHasAdmin && !isAdminJwtValue) || (!userHasAdmin && !isAdminJwtValue);
+        return !((!userHasAdmin && isAdminJwtValue) || (userHasAdmin && !isAdminJwtValue) || (!userHasAdmin && !isAdminJwtValue));
     }
 
     public bool UserExists(Guid id)

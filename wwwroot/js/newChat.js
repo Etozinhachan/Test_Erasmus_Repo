@@ -92,7 +92,7 @@ var checkCookies = async () => {
     let erai_jwt = await getCookie(jwt_token_Header, true);
     //console.log(decodeURIComponent(document.cookie));
     if (username == "" || pw == "" || erai_jwt == "") {
-        window.location.replace("http://localhost:5274");
+        window.location.replace(`${window.location.href}`.replace('newChat.html', ''));
     }
 }
 

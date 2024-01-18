@@ -55,7 +55,13 @@ namespace testingStuff.Controllers
             bool isAcceptable = acceptableUserPrompts.Contains(prompt);
             if (aiResponse.response.Length == 0)
             {
-                returnValue = isAcceptable ? promptResponses[Array.IndexOf(acceptableUserPrompts, prompt)] : randomResponses[new Random().Next(randomResponses.Length)];
+                if (prompt.ToLower().Contains("pifaro")){
+                    returnValue = "Oh yeah, that human who's coding skills are so bad that i even have a response just from his name being said";
+                    is_final = true;
+                    return (returnValue, is_final);
+                }
+                returnValue = isAcceptable ? promptResponses[Array.IndexOf(acceptableUserPrompts, prompt)] : randomResponses[new Random().Next(randomResponses.Length)];               
+                
                 var returnLength = returnValue.Length;
                 if (isAcceptable)
                 {

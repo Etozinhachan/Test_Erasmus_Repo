@@ -35,9 +35,31 @@ namespace testingStuff.Controllers
         }
 
         // GET: api/Users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
+
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_configuration, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (!_userRepository.UserExists(userId))
+            {
+                return BadRequest(new ChatBadResponse
+                {
+                    title = "Bad Request",
+                    status = 400,
+                    detail = "The request is invalid."
+                });
+            }
+
+            var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
+            var isReallyAdmin = _userRepository.getUser(userId)!.isAdmin;
+
+            if (!_userRepository.isReallyAdmin(userId, isAdmin)){
+                return Forbid();
+            }
             return await _context.Users.ToListAsync();
         }
 
@@ -65,7 +87,7 @@ namespace testingStuff.Controllers
                 return BadRequest();
             }
 
-            if (existsUserWithSameUsername(userDTODTO.UserName, _context))
+            if (_userRepository.UserExists(userDTODTO.UserName))
             {
                 return BadRequest("A user with that username already exists");
             }
@@ -108,7 +130,7 @@ namespace testingStuff.Controllers
         public async Task<ActionResult<User>> registerUser(UserDTO userDTO)
         {
 
-            if (existsUserWithSameUsername(userDTO.UserName, _context))
+            if (_userRepository.UserExists(userDTO.UserName))
             {
                 return BadRequest("A user with that username already exists");
             }
@@ -332,13 +354,6 @@ namespace testingStuff.Controllers
                             signingCredentials: signIn);
                         */
             return token;
-        }
-        #endregion
-
-        #region  helper
-        public static bool existsUserWithSameUsername(string username, DbDataContext _context)
-        {
-            return _context.Users.Any(u => u.UserName == username);
         }
         #endregion
     }

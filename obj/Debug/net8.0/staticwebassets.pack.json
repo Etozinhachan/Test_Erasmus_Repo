@@ -33,6 +33,14 @@
       "PackagePath": "staticwebassets\\css\\chat.css"
     },
     {
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\dashboard.css",
+      "PackagePath": "staticwebassets\\css\\dashboard.css"
+    },
+    {
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\dashboardResponsive.css",
+      "PackagePath": "staticwebassets\\css\\dashboardResponsive.css"
+    },
+    {
       "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\login.css",
       "PackagePath": "staticwebassets\\css\\login.css"
     },
@@ -41,12 +49,20 @@
       "PackagePath": "staticwebassets\\css\\newChat.css"
     },
     {
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\dashboard.html",
+      "PackagePath": "staticwebassets\\dashboard.html"
+    },
+    {
       "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\endpoints.html",
       "PackagePath": "staticwebassets\\endpoints.html"
     },
     {
       "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\dashboard.js",
+      "PackagePath": "staticwebassets\\js\\dashboard.js"
     },
     {
       "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\login.js",

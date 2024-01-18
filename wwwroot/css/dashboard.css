@@ -1,0 +1,55 @@
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh !important; 
+    background-color: #f4f4f4;
+}
+
+header {
+    height: 10%;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+section{
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+td .EditButton{
+    padding: 8px;
+    width: 60px;
+    background-color: rgba(120, 140, 226, 0.7);
+    border: 1px solid rgba(63, 74, 121, 0.9);
+    cursor: pointer;
+}
+
+td .DeleteButton{
+    padding: 8px;    
+    width: 60px;
+    background-color: rgba(226, 150, 120, 0.7);
+    border: 1px solid rgba(119, 79, 63, 0.7);
+    cursor: pointer;
+}

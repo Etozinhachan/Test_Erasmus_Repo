@@ -6,8 +6,6 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["testingStuff.csproj", "."]
@@ -15,8 +13,6 @@ RUN dotnet restore "./testingStuff.csproj"
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "testingStuff.csproj" -c Release -o /app/build
-
-
 
 FROM build AS publish
 RUN dotnet publish "testingStuff.csproj" -c Release -o /app/publish /p:UseAppHost=false

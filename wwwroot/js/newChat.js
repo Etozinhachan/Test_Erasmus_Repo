@@ -406,16 +406,15 @@ function updateHistory(chat_id, title) {
     const iconElement = document.createElement('img')
     iconElement.src = '../assets/images/svg/bx-trash.svg'
     iconElement.className = 'icon'
-    iconElement.style.width = '15px'
-    iconElement.style.height = '15px'
+    iconElement.style.width = '14px'
+    iconElement.style.height = '14px'
 
     iconElement.style.display = 'none'
     const pElement = document.createElement('p');
     pElement.textContent = title
     //pElement.setAttribute('id', chat.id)
     pElement.id = chat_id
-    iconElement.style.position = 'absolute'
-    iconElement.style.left = '8.6%'
+    iconElement.style.marginLeft = '15%'
     pElement.addEventListener('click', async () => await changeChat(pElement))
     pElement.addEventListener('mouseenter', async () => {iconElement.style.display = 'inline-block'})
     pElement.addEventListener('mouseleave', () => iconElement.style.display = 'none')
@@ -496,6 +495,7 @@ async function loadChats() {
             updateHistory(chat.id, chat.userPrompts[0].prompt)
         }
     });
+    historyElement.scrollTo(0, -historyElement.scrollHeight);
 }
 
 async function userExists(jwt_user_token){

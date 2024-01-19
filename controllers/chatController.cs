@@ -120,7 +120,7 @@ namespace testingStuff.Controllers
             }
 
             var code = prompt.Substring(1, inputStart - 1);
-            var input = prompt.Substring(inputStart);
+            var input = prompt.Substring(inputStart + 1);
 
             var CodeToCompile = new Code{
                 code = code,

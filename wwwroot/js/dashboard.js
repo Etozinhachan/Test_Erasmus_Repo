@@ -5,6 +5,9 @@ const userForm = document.querySelector('#userForm')
 const jwt_token_Header = "erai-jwt-token";
 
 
+const editModal = document.querySelector(".edit_modal");
+const dismissSucessMsgBtn = document.querySelector(".dismiss__btn");
+
 var sleep = ms => new Promise(r => setTimeout(r, ms));
 
 window.onload = async () => {
@@ -137,8 +140,8 @@ function buildRow(user) {
 
     row.id = `_${cellId.textContent}`
 
-    editButton.addEventListener('click', () => editButtonHandler(row.id))
-    deleteButton.addEventListener('click', () => deleteButtonHandler(row.id))
+    editButton.addEventListener('click', async () => await editButtonHandler(row.id))
+    deleteButton.addEventListener('click', async () => await deleteButtonHandler(row.id))
 
     cellButons.append(editButton)
     cellButons.append(deleteButton)
@@ -149,7 +152,44 @@ function buildRow(user) {
 }
 
 
-function editButtonHandler(id) {
+async function editButtonHandler(id) {
+    const userId = id.substring(id.indexOf('_') + 1)
+    /*     const modalTitle = document.querySelector('.edit_modal_head p')
+        modalTitle.textContent += `for id ${id}` */
+    const hasUpdatePerm = await checkUserPerms(await getCookie(jwt_token_Header), userId)
+    if (hasUpdatePerm) {
+        editModal.showModal();
+        const userUpdateForm = document.querySelector('#update_user_form')
+        userUpdateForm.querySelector('#update_user_submit').addEventListener('click', async () => {
+            const formData = new FormData(userUpdateForm)
+            await updateUser(userId, formData.get("UserName"), formData.get("passHash"))
+            editModal.close();
+            await checkCookies();
+            window.location.href = `${window.location.href}`
+        })
+    }
+}
+
+async function updateUser(userId, username, password) {
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`, // por ai o jwt token guardado no cookie
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "UserName": `${username}`,
+            "passHash": `${password}`
+        })
+    }
+    try {
+        const response = await fetch(`/api/users/${userId}`, options)
+        if (response.status != 204) {
+            throw new Error()
+        }
+    } catch (error) {
+        console.error(error)
+    }
 
 }
 
@@ -231,7 +271,7 @@ async function deleteUser(id) {
 }
 
 
-async function userExists(jwt_user_token){
+async function userExists(jwt_user_token) {
     const options = {
         method: "GET",
         headers: {
@@ -244,7 +284,7 @@ async function userExists(jwt_user_token){
         console.log(id)
         const response = await fetch(`/api/users/${id}`, options)
         console.log(await response.json())
-        if (response.status != 200){
+        if (response.status != 200) {
             throw new Error("user doesn't exist in some way, shape or form")
         }
         return true
@@ -256,14 +296,14 @@ async function userExists(jwt_user_token){
 
 async function getUserId(username) {
     const users = await getAllUsers()
-        for (let index = 0; index < users.length; index++) {
-            if (users[index].userName == username){
-                return users[index].id;
-            }
+    for (let index = 0; index < users.length; index++) {
+        if (users[index].userName == username) {
+            return users[index].id;
         }
+    }
 }
 
-async function createAccount(){
+async function createAccount() {
     event.preventDefault()
     const options = {
         method: `POST`,
@@ -279,3 +319,10 @@ async function createAccount(){
     const response = await fetch('/api/users/register', options);
     window.location.replace(`${window.location.href}`);
 }
+
+
+
+
+dismissSucessMsgBtn.addEventListener("click", function () {
+    editModal.close();
+});

@@ -134,12 +134,8 @@ namespace testingStuff.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> PutUser([FromRoute] Guid id, UserDTODTO userDTODTO)
+        public async Task<IActionResult> PutUser([FromRoute] Guid id, UserDTO userDTODTO)
         {
-            if (id != userDTODTO.id)
-            {
-                return BadRequest();
-            }
 
             if (_userRepository.UserExists(userDTODTO.UserName))
             {

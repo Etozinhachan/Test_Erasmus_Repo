@@ -77,3 +77,73 @@ input {
     margin-bottom: 10px;
     box-sizing: border-box;
 }
+
+
+
+:root {
+    --sucesspage-list: url(./assets/images/icon-list.svg);
+    --dark-slate-grey: hsl(234, 29%, 20%);
+    --charcoal-grey: hsl(235, 18%, 26%);
+    --grey: hsl(231, 7%, 60%);
+    --tomato: hsl(4, 100%, 67%);
+    --white: hsl(0, 0%, 100%);
+  }
+
+
+.edit_modal {
+    margin: auto;
+    height: 70vh;
+    width: 100%;
+    padding: 3rem 2rem;
+    border: none;
+    border-radius: 1rem;
+  }
+  
+  dialog::backdrop {
+    background-color: hsl(234, 29%, 20%);
+  }
+  
+  .edit_modal_container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+  
+  }
+  
+  .edit_modal_head {
+    max-width: 200px;
+    margin: 0 auto;
+    font-size: 2.5em;
+    color: var(--dark-slate-grey);
+
+  }
+  
+  .success__note {
+    max-width: 200px;
+    margin: 0 auto;
+    color: var(--dark-slate-grey);
+    line-height: 1.5rem;
+  }
+  
+  #user__email__address {
+    font-weight: 700;
+  }
+  
+  .dismiss__btn {
+    padding: 0.9rem;
+    background: var(--dark-slate-grey);
+    color: var(--white);
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    outline: none;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    box-shadow: 1px 2px 5px var(--grey);
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .dismiss__btn:hover {
+    background: linear-gradient(0.25turn,#e04313, hsl(4, 100%, 67%));
+  
+  }

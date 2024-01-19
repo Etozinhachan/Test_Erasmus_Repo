@@ -113,6 +113,7 @@ var handleFormSubmit = async (event) => {
 
     try {
         const formData = new FormData(form);
+        form.reset()
 
         /*
         console.log(form.method)
@@ -133,7 +134,6 @@ var handleFormSubmit = async (event) => {
         /* responseData.headers.forEach(item => {
             console.log(item);
         }); */
-        form.reset()
         if (responseData.headers.has(jwt_token_Header)){
             await setCookie("UserName", formData.get("UserName"), {minutes: cookieDuration})
             await setCookie("passHash", formData.get("passHash"), {minutes: cookieDuration})
@@ -142,6 +142,7 @@ var handleFormSubmit = async (event) => {
         window.location.replace(`${window.location.href}newChat.html`);
     } catch (error) {
         console.error(error);
+        form.reset()
     }
 }
 

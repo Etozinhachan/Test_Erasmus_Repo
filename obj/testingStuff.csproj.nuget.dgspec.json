@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj": {}
+    "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj": {
+    "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj",
+        "projectUniqueName": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj",
         "projectName": "testingStuff",
-        "projectPath": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\testingStuff.csproj",
-        "packagesPath": "C:\\Users\\ESL1449\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\obj\\",
+        "projectPath": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\testingStuff.csproj",
+        "packagesPath": "C:\\Users\\psubg\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ESL1449\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\psubg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -92,6 +91,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             },
             "OpenAI": {
               "target": "Package",

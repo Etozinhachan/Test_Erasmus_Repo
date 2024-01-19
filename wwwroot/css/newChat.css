@@ -114,7 +114,7 @@ nav {
     padding: 10px;
     margin: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     height: 100%;
     overflow-y: scroll;
 }

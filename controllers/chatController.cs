@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NuGet.Protocol;
 using testingStuff.data;
 using testingStuff.helper;
 using testingStuff.Identity;
@@ -117,7 +119,7 @@ namespace testingStuff.Controllers
                 inputStart = prompt.Length;
             }
 
-            var code = prompt.Substring(1, inputStart);
+            var code = prompt.Substring(1, inputStart - 1);
             var input = prompt.Substring(inputStart);
 
             var CodeToCompile = new Code{
@@ -134,7 +136,13 @@ namespace testingStuff.Controllers
                 using (var response = await httpClient.PostAsync("https://cscompilerapi.onrender.com/api/test/compilecode", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    outputCode = JsonConvert.DeserializeObject<OutputCode>(apiResponse)!;
+                    JObject jsonResult = (JObject) JsonConvert.DeserializeObject(apiResponse)!;
+                    outputCode = new OutputCode{
+                        input = input,
+                        code = code,
+                        output = jsonResult.SelectToken("value.output")!.ToString(),
+                        error = jsonResult.SelectToken("value.error")!.ToString()
+                    };
                 }
             }
 
@@ -149,7 +157,7 @@ namespace testingStuff.Controllers
             ChatSucessfullResponse? aiResponse = _chatRepository.getLastAiResponse(_chatRepository.getChatByConvoId(chat_id));
 
 
-            string prompt = userPrompt.prompt.ToLower();
+            string prompt = userPrompt.prompt;
             return prompt.Substring(0, 1) == "?" ? await getApiCompilationFullResponseAsync(prompt, aiResponse) : getApiFullResponse(prompt, aiResponse);
         }
 

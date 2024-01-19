@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using testingStuff.data;
 using testingStuff.helper;
 using testingStuff.Identity;
@@ -100,14 +101,56 @@ namespace testingStuff.Controllers
 
         }
 
-        private (string response, bool is_final) generateAiResponse(Guid chat_id)
+        private async Task<(string response, bool is_final)> getApiCompilationFullResponseAsync(string prompt, ChatSucessfullResponse? aiResponse)
+        {
+            if (aiResponse == null)
+            {
+                aiResponse = new ChatSucessfullResponse
+                {
+                    response = ""
+                };
+            }
+
+            var inputStart = prompt.IndexOf('|');
+
+            if (inputStart == -1){
+                inputStart = prompt.Length;
+            }
+
+            var code = prompt.Substring(1, inputStart);
+            var input = prompt.Substring(inputStart);
+
+            var CodeToCompile = new Code{
+                code = code,
+                input = input
+            };
+
+            OutputCode outputCode;
+
+            using (var httpClient = new HttpClient())
+            {
+                StringContent content = new StringContent(JsonConvert.SerializeObject(CodeToCompile), Encoding.UTF8, "application/json");
+
+                using (var response = await httpClient.PostAsync("https://cscompilerapi.onrender.com/api/test/compilecode", content))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    outputCode = JsonConvert.DeserializeObject<OutputCode>(apiResponse)!;
+                }
+            }
+
+            string output = outputCode.output == "" ? outputCode.error : outputCode.output;
+
+            return (output, true);
+        }
+
+        private async Task<(string response, bool is_final)> generateAiResponseAsync(Guid chat_id)
         {
             var userPrompt = _chatRepository.getLastUserPrompt(_chatRepository.getChatByConvoId(chat_id));
             ChatSucessfullResponse? aiResponse = _chatRepository.getLastAiResponse(_chatRepository.getChatByConvoId(chat_id));
 
 
             string prompt = userPrompt.prompt.ToLower();
-            return getApiFullResponse(prompt, aiResponse);
+            return prompt.Substring(0, 1) == "?" ? await getApiCompilationFullResponseAsync(prompt, aiResponse) : getApiFullResponse(prompt, aiResponse);
         }
 
         /* private string getApiPartialResponse(string prompt){
@@ -275,7 +318,7 @@ namespace testingStuff.Controllers
                 };
                 _chatRepository.AddUserPrompt(userPrompt);
 
-                var (response, is_final) = generateAiResponse(chatResponse.conversation_id);
+                var (response, is_final) = await generateAiResponseAsync(chatResponse.conversation_id);
                 chatResponse.response = response;
                 chatResponse.is_final = is_final;
 
@@ -352,7 +395,7 @@ namespace testingStuff.Controllers
                 }
                 */
 
-                var (response, is_final) = generateAiResponse(conversation_id);
+                var (response, is_final) = await generateAiResponseAsync(conversation_id);
                 /* 
                             var chatResponse = new ChatSucessfullResponse
                             {

@@ -57,16 +57,41 @@ namespace testingStuff.Controllers
             var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
             var isReallyAdmin = _userRepository.getUser(userId)!.isAdmin;
 
-            if (!_userRepository.isReallyAdmin(userId, isAdmin)){
+            if (!_userRepository.isReallyAdmin(userId, isAdmin))
+            {
                 return Forbid();
             }
             return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
+
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_configuration, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (!_userRepository.UserExists(userId) || !_userRepository.UserExists(id))
+            {
+                return NotFound(new ChatBadResponse
+                {
+                    title = "Not Found",
+                    status = 404,
+                    detail = "The request is invalid."
+                });
+            }
+
+            var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
+            var isReallyAdmin = _userRepository.getUser(userId)!.isAdmin;
+
+            if (!_userRepository.hasPerm(userId, id, isAdmin))
+            {
+                return Forbid();
+            }
+
             User? user = await _context.Users.FindAsync(id);
 
             if (user == null || !_context.Users.Any(u => u.id == id))
@@ -74,7 +99,36 @@ namespace testingStuff.Controllers
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
+        }
+
+        [Authorize]
+        [HttpGet("id")]
+        public async Task<ActionResult<User>> GetUserId()
+        {
+
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_configuration, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound(new ChatBadResponse
+                {
+                    title = "Not Found",
+                    status = 404,
+                    detail = "The request is invalid."
+                });
+            }
+
+            User? user = await _context.Users.FindAsync(userId);
+
+            if (user == null || !_context.Users.Any(u => u.id == userId))
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         // PUT: api/Users/5
@@ -193,9 +247,31 @@ namespace testingStuff.Controllers
         }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_configuration, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (!_userRepository.UserExists(userId) || !_userRepository.UserExists(id))
+            {
+                return NotFound(new ChatBadResponse
+                {
+                    title = "Not Found",
+                    status = 404,
+                    detail = "The request is invalid."
+                });
+            }
+
+            var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
+            var isReallyAdmin = _userRepository.getUser(userId)!.isAdmin;
+
+            if (!_userRepository.hasPerm(userId, id, isAdmin))
+            {
+                return Forbid();
+            }
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {

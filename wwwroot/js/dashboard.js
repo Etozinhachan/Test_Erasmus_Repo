@@ -1,6 +1,7 @@
 const tableDiv = document.querySelector('.user-list')
 const table = document.querySelector('.user-list-table')
 const tableBody = document.querySelector('.user-list-table-body')
+const userForm = document.querySelector('#userForm')
 const jwt_token_Header = "erai-jwt-token";
 
 
@@ -70,7 +71,10 @@ var checkCookies = async () => {
     let pw = await getCookie("passHash", true);
     let erai_jwt = await getCookie(jwt_token_Header, true);
     //console.log(decodeURIComponent(document.cookie));
-    if (username == "" || pw == "" || erai_jwt == "") {
+    if (username == "" || pw == "" || erai_jwt == "" || !(await userExists(erai_jwt))) {
+        deleteCookie('UserName')
+        deleteCookie('passHash')
+        deleteCookie(jwt_token_Header)
         window.location.replace(`${window.location.href}`.replace('dashboard.html', ''));
     }
 }
@@ -145,16 +149,133 @@ function buildRow(user) {
 }
 
 
-function editButtonHandler(id){
+function editButtonHandler(id) {
 
 }
 
-function deleteButtonHandler(id){
+async function deleteButtonHandler(id) {
     var result = confirm("Want to delete?");
     if (result) {
         const userRowToDelete = tableBody.querySelector(`#${id}`)
         userRowToDelete.remove()
         const userId = id.substring(id.indexOf('_') + 1)
-        console.log(userId)
+        const hasDeletePerm = await checkUserPerms(await getCookie(jwt_token_Header), userId)
+        if (hasDeletePerm) {
+            await deleteUser(userId)
+            await checkCookies()
+        }
     }
+}
+
+function toBool(value_string) {
+    if (value_string === "1" || value_string.toLowerCase() === "true") {
+        return true
+    }
+    return false
+}
+
+async function checkUserPerms(jwt_user_token, id) {
+    return (await isThisUser(id, jwt_user_token)) || (await checkAdmin(jwt_user_token))
+}
+
+async function getUserById(id, jwt_user_token) {
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${jwt_user_token}`
+        }
+    }
+
+    try {
+        const response = await fetch(`/api/users/${id}`, options)
+        const result = await response.json()
+        return result
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function isThisUser(id, jwt_user_token) {
+    return await getUserById(id, jwt_user_token).id == id
+}
+
+async function checkAdmin(jwt_user_token) {
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${jwt_user_token}`
+        }
+    }
+
+    try {
+        const response = await fetch('/api/users/is_admin', options)
+        const result = await response.text()
+        return toBool(result)
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}
+
+async function deleteUser(id) {
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`, // por ai o jwt token guardado no cookie
+        },
+    }
+    const response = await fetch(`/api/users/${id}`, options)
+    if (response.status != 204) {
+        throw new Error()
+    }
+}
+
+
+async function userExists(jwt_user_token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${jwt_user_token}`
+        }
+    }
+
+    try {
+        const id = await getUserId(await getCookie('UserName'))
+        console.log(id)
+        const response = await fetch(`/api/users/${id}`, options)
+        console.log(await response.json())
+        if (response.status != 200){
+            throw new Error("user doesn't exist in some way, shape or form")
+        }
+        return true
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}
+
+async function getUserId(username) {
+    const users = await getAllUsers()
+        for (let index = 0; index < users.length; index++) {
+            if (users[index].userName == username){
+                return users[index].id;
+            }
+        }
+}
+
+async function createAccount(){
+    event.preventDefault()
+    const options = {
+        method: `POST`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "UserName": `${userForm.querySelector('#name').value}`,
+            "passHash": `${userForm.querySelector('#pass').value}`
+        }),
+    };
+    //alert("about to post" + formDataJsonString)
+    const response = await fetch('/api/users/register', options);
+    window.location.replace(`${window.location.href}`);
 }

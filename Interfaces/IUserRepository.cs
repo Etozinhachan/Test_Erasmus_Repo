@@ -11,4 +11,5 @@ public interface IUserRepository
     public bool UserExists(string username);
     public bool isAdmin(Guid user_id);
     public bool isReallyAdmin(Guid user_id, bool isAdminJwtValue);
+    public bool hasPerm(Guid jwt_id, Guid user_id, bool isAdmin);
 }

@@ -29,6 +29,11 @@ public class UserRepository : IUserRepository
         return _context.Users.Where(u => u.UserName == username).FirstOrDefault();
     }
 
+    public bool hasPerm(Guid jwt_id, Guid user_id, bool isAdmin)
+    {
+        return  (user_id == jwt_id && !isReallyAdmin(jwt_id, isAdmin)) || (user_id != jwt_id && isReallyAdmin(jwt_id, isAdmin)) || (user_id == jwt_id && isReallyAdmin(jwt_id, isAdmin));
+    }
+
     public bool isAdmin(Guid user_id)
     {
         return getUser(user_id).isAdmin;

@@ -30,8 +30,17 @@
             </table>
         </div>
 
-        <div class="">
+        <div class="user-form">
+            <h2>Add User</h2>
+            <form id="userForm" onsubmit="createAccount()">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="UserName" required>
 
+                <label for="pass">Password:</label>
+                <input type="password" id="pass" name="passHash" required>
+
+                <button type="submit">Add User</button>
+            </form>
         </div>
     </section>
 

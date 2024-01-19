@@ -2,8 +2,9 @@ const submitButton = document.querySelector("#submit")
 const outputElement = document.querySelector('#output')
 const inputElement = document.querySelector('input')
 const historyElement = document.querySelector('.history')
-const buttonElement = document.querySelector('button')
+const buttonElement = document.querySelector('#createChatBtn')
 const chatBoxElement = document.querySelector('.chat-box')
+const logOutElement = document.querySelector('#logOutBtn')
 const jwt_token_Header = "erai-jwt-token";
 var in_chat = false;
 var enabled = true;
@@ -24,7 +25,7 @@ window.onload = async function () {
             .includes('reload')
     )
     if(pageAccessedByReload){
-        console.log('rawrz')
+        //console.log('rawrz')
         const current_chat_id = await getCookie('current_chat')
 
         const chats = historyElement.querySelectorAll('p');
@@ -35,9 +36,18 @@ window.onload = async function () {
                 deleteCookie('current_chat')
             }
         });
-        
     }
-    
+    //console.log(await isAdmin(await getCookie(jwt_token_Header)));
+    if (await isAdmin(await getCookie(jwt_token_Header))){
+        const navSide = document.querySelector('.sidebar nav')
+        const adminElement = document.createElement('button')
+        adminElement.style.padding = '10px'
+        adminElement.style.margin = '0'
+        adminElement.style.border = '0'
+        adminElement.addEventListener('click', () => { window.location.replace(`${window.location.href}`.replace('newChat.html', 'dashboard.html')); })
+
+        navSide.append(adminElement)
+    }
 }
 
 var setCookie = async (cname, cvalue, duration) => {
@@ -91,7 +101,11 @@ var checkCookies = async () => {
     let pw = await getCookie("passHash", true);
     let erai_jwt = await getCookie(jwt_token_Header, true);
     //console.log(decodeURIComponent(document.cookie));
-    if (username == "" || pw == "" || erai_jwt == "") {
+    //console.log(await userExists(erai_jwt))
+    if (username == "" || pw == "" || erai_jwt == "" || !(await userExists(erai_jwt))) {
+        deleteCookie('UserName')
+        deleteCookie('passHash')
+        deleteCookie(jwt_token_Header)
         window.location.replace(`${window.location.href}`.replace('newChat.html', ''));
     }
 }
@@ -431,7 +445,7 @@ async function hasChatPerm(jwt_user_token, chat_id){
     const options = {
         method: "GET",
         headers: {
-            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`
+            'Authorization': `Bearer ${jwt_user_token}`
         }
     }
 
@@ -447,8 +461,29 @@ async function hasChatPerm(jwt_user_token, chat_id){
     }
 }
 
-function isAdmin(jwt_user_token){
+function toBool(value_string){
+    if (value_string === "1" || value_string.toLowerCase() === "true"){
+        return true
+    }
+    return false
+}
 
+async function isAdmin(jwt_user_token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${jwt_user_token}`
+        }
+    }
+
+    try{
+        const response = await fetch('/api/users/is_admin', options)
+        const result = await response.text()
+        return toBool(result)
+    }catch(error){
+        console.error(error)
+        return false
+    }
 }
 
 async function loadChats() {
@@ -461,6 +496,68 @@ async function loadChats() {
             updateHistory(chat.id, chat.userPrompts[0].prompt)
         }
     });
+}
+
+async function userExists(jwt_user_token){
+    const options = {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${jwt_user_token}`
+        }
+    }
+
+    try {
+        const id = await getUserId()
+        const response = await fetch(`/api/users/${id}`, options)
+        if (response.status != 200){
+            throw new Error("user doesn't exist in some way, shape or form")
+        }
+        return true
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}
+
+async function getUserId() {
+    const options = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`
+        }
+    }
+    try {
+        const response = await fetch(`/api/users/id`, options)
+        const data = await response.json();
+
+        return data.id;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function getAllUsers() {
+    const options = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`
+        }
+    }
+    try {
+        const response = await fetch('/api/users', options)
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+var logout = async () => {
+    deleteCookie('UserName')
+    deleteCookie('passHash')
+    deleteCookie(jwt_token_Header)
+    await checkCookies();
 }
 
 function disable_send_button() {
@@ -477,6 +574,8 @@ function enable_send_button() {
 submitButton.addEventListener('click', getMessage)
 
 buttonElement.addEventListener('click', createNewChat)
+
+logOutElement.addEventListener('click', logout)
 
 onkeyup = async (event) => {
     if (event.keyCode == 13) {

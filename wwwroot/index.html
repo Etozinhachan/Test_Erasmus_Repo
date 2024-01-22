@@ -5,43 +5,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 
 <body>
 
-    <h2>Register</h2>
-    <div class="endpoint_container" id="Post_User_Container">
-        <form name="register" action="/api/Users/register" method="POST" class="generalForms">
-            <label for="post_user_usernameTxt">Username: </label>
-            <input type="text" name="UserName" id="post_user_usernameTxt"
-                placeholder="Insert the username of the user you want to create here">
+    <div>
+        <header>
+            <h2>LOGIN</h2>
+        </header>
+
+        <section>
+
+            <h2>Register</h2>
+            <div class="endpoint_container" id="Post_User_Container">
+                <form name="register" action="/api/Users/register" method="POST" class="generalForms">
+                    <label for="post_user_usernameTxt">Username: </label>
+                    <input type="text" name="UserName" id="post_user_usernameTxt"
+                        placeholder="Insert the username of the user you want to create here">
+                    <br>
+                    <label for="post_user_passwordTxt">Password: </label>
+                    <input type="password" name="passHash" id="post_user_passwordTxt"
+                        placeholder="Insert the password of the user you want to create here">
+                    <br>
+                    <input type="submit" id="post_user_btn" value="Register">
+                </form>
+            </div>
+
             <br>
-            <label for="post_user_passwordTxt">Password: </label>
-            <input type="password" name="passHash" id="post_user_passwordTxt"
-                placeholder="Insert the password of the user you want to create here">
+
+            <h2>Login</h2>
+            <div class="endpoint_container" id="Post_User_Container">
+                <form name="login" action="/api/Users/login" method="POST" class="generalForms" id="login">
+                    <label for="post_user_usernameTxt">Username: </label>
+                    <input type="text" name="UserName" id="post_user_usernameTxt"
+                        placeholder="Insert the username of the user you want to create here">
+                    <br>
+                    <label for="post_user_passwordTxt">Password: </label>
+                    <input type="password" name="passHash" id="post_user_passwordTxt"
+                        placeholder="Insert the password of the user you want to create here">
+                    <br>
+                    <input type="submit" id="post_user_btn" value="Login">
+                </form>
+            </div>
+
             <br>
-            <input type="submit" id="post_user_btn" value="Register">
-        </form>
+
+        </section>
     </div>
 
-    <br>
 
-    <h2>Login</h2>
-    <div class="endpoint_container" id="Post_User_Container">
-        <form name="login" action="/api/Users/login" method="POST" class="generalForms" id = "login">
-            <label for="post_user_usernameTxt">Username: </label>
-            <input type="text" name="UserName" id="post_user_usernameTxt"
-                placeholder="Insert the username of the user you want to create here">
-            <br>
-            <label for="post_user_passwordTxt">Password: </label>
-            <input type="password" name="passHash" id="post_user_passwordTxt"
-                placeholder="Insert the password of the user you want to create here">
-            <br>
-            <input type="submit" id="post_user_btn" value="Login">
-        </form>
-    </div>
-
-    <br>
 
 
     <script src="./js/login.js"></script>

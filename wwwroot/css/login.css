@@ -21,13 +21,14 @@ section{
 }
 
 div{
-    background-color: aqua;
+    background-color: rgb(184, 184, 184);
     padding: 10px;
+    border-radius: 10%;
 }
 
 header{
     background-color: #333;
-    color: #fff;
+    color: #e2e2e2;
     padding: 10px;
     margin: 10px;
     /* border: 1px solid #b3b3b3;*/
@@ -37,5 +38,13 @@ header{
 
 header h2{
     font-size: 25px;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.endpoint_container{
+
+}
+
+#Register_User_Container{
+    padding: 10px;
 }

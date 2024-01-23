@@ -11,15 +11,17 @@ body{
     align-items: center;
     justify-content: center;
     /*background-color: #d3d3d3;*/
-     background-image: linear-gradient(to left, #1c00f2, #EE3211); 
+    background: linear-gradient(to left, #1c00f2, #EE3211); 
     height: 100vh;
     width: 100%;
-    /* animation: gradient_animation steps(25); */
+    background-size: 200% 200%;
+     animation: gradient_animation 5s ease infinite; 
 }
 
 @keyframes gradient_animation {
-    from {background-color: red;}
-    to {background-color: yellow;}
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
   }
 
 section{
@@ -124,4 +126,16 @@ input{
     cursor: pointer;
     /* border: 1px solid; */
     background: linear-gradient(to right, rgba(255,255,255,0.5), #fff);
+}
+
+.username_icon{
+    position: relative;
+    top: 12%;
+    right: 45%;
+}
+
+.password_icon{
+    position: relative;
+    top: 11%;
+    right: 45%;
 }

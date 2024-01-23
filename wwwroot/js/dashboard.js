@@ -2,6 +2,7 @@ const tableDiv = document.querySelector('.user-list')
 const table = document.querySelector('.user-list-table')
 const tableBody = document.querySelector('.user-list-table-body')
 const userForm = document.querySelector('#userForm')
+const logoutbtn = document.querySelector('#logOutBtn')
 const jwt_token_Header = "erai-jwt-token";
 
 
@@ -320,9 +321,19 @@ async function createAccount() {
     window.location.replace(`${window.location.href}`);
 }
 
+var logout = async () => {
+    deleteCookie('UserName')
+    deleteCookie('passHash')
+    deleteCookie(jwt_token_Header)
+    await checkCookies();
+}
 
 
 
-dismissSucessMsgBtn.addEventListener("click", function () {
+dismissSucessMsgBtn.addEventListener("click", () => {
     editModal.close();
+});
+
+logoutbtn.addEventListener('click', () =>{
+    logout();
 });

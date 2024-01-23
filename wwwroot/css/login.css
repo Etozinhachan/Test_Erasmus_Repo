@@ -9,7 +9,7 @@ body{
     align-items: center;
     justify-content: center;
     /*background-color: #d3d3d3;*/
-    
+    background-image: linear-gradient(to left, #1c00f2, #EE3211);
     height: 100vh;
     width: 100%;
 }
@@ -17,34 +17,91 @@ body{
 section{
     display: flex;
     flex-direction: column;
-    border: 1px solid;
+    padding: 5px;
+    /*border: 1px solid;*/
+    justify-content: center;
+    align-items: center ;
+}
+
+section h2{
+    /*border: 1px solid;*/
+    margin: 10px
 }
 
 div{
-    background-color: rgb(184, 184, 184);
-    padding: 10px;
+    background-color: rgb(120, 120, 120, 0.4);
+    padding: 8px;
     border-radius: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.05) 0 54px 55px,
+    rgba(0, 0, 0, 0.05) 0 -12px 30px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px,
+    rgba(0, 0, 0, 0.05) 0 12px 3px,
+    rgba(0, 0, 0, 0.09) 0 -3px 5px;
 }
 
 header{
-    background-color: #333;
+    background-color: rgba(175, 175, 175, 0.15);
     color: #e2e2e2;
     padding: 10px;
-    margin: 10px;
+    margin: 5px;
     /* border: 1px solid #b3b3b3;*/
     border-radius: 10px;
+    min-width: 50%;
+    max-width: 50%;
     text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.05) 0 54px 55px,
+    rgba(0, 0, 0, 0.05) 0 -12px 30px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px,
+    rgba(0, 0, 0, 0.05) 0 12px 3px,
+    rgba(0, 0, 0, 0.09) 0 -3px 5px;   
 }
 
 header h2{
     font-size: 25px;
-    font-family: Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 .endpoint_container{
-
+    border: 2px black;
+    border-style: solid;
+    border-radius: 10px;
 }
 
+
 #Register_User_Container{
-    padding: 10px;
+    padding: 7px;
+    text-align: center;
+}
+
+::placeholder{
+    text-align: center;
+}
+
+#Login_User_Container{
+    padding: 7px;
+}
+
+form{
+    min-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input{
+    padding: 6px;
+    margin-bottom: 8px;
+    min-width: 500px;
+    border: 0;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.user_btns{
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid;
 }

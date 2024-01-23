@@ -102,7 +102,7 @@ var checkCookies = async () => {
         pwInput.style.minWidth ="170px";
         pwInput.style.minHeight = "15px";
 
-        loginForm.querySelector('#post_user_btn').click();
+        loginForm.querySelector('#login_user_btn').click();
     }
 }
 

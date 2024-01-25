@@ -115,6 +115,9 @@ var deleteCookie = name => {
 }
 
 async function changeChat(chat) {
+    if (current_chat_clicked == chat){
+        return;
+    }
     await checkCookies();
     if (!response_finished_generating) {
         return;

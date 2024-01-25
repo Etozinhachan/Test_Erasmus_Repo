@@ -93,7 +93,7 @@ var checkCookies = async () => {
         var pwInput = loginForm.querySelector('input[name="passHash"]');
         usernameInput.value = username;
         pwInput.value = pw;
-        
+
         usernameInput.style.fontSize = "0px";
         usernameInput.style.minWidth ="170px";
         usernameInput.style.minHeight = "15px";

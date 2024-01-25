@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using testingStuff.data;
 using testingStuff.Interfaces;
 using testingStuff.models;
@@ -16,7 +17,7 @@ public class UserRepository : IUserRepository
 
     public void AddUser(User user){
         _context.Users.Add(user);
-        _context.SaveChanges();
+        SaveChanges();
     }
 
     public User? getUser(Guid id)
@@ -45,6 +46,17 @@ public class UserRepository : IUserRepository
         return !((!userHasAdmin && isAdminJwtValue) || (userHasAdmin && !isAdminJwtValue) || (!userHasAdmin && !isAdminJwtValue));
     }
 
+    public User setAdmin(Guid user_id, bool admin)
+    {
+        var user = _context.Users.Where(u => u.id == user_id).First();
+
+        user.isAdmin = admin;
+
+        userModified(user);
+
+        return user;
+    }
+
     public bool UserExists(Guid id)
     {
         return _context.Users.Any(u => u.id == id);
@@ -53,5 +65,16 @@ public class UserRepository : IUserRepository
     public bool UserExists(string username)
     {
         return _context.Users.Any(u => u.UserName == username);
+    }
+
+    public void userModified(User user)
+    {
+        _context.Entry(user).State = EntityState.Modified;
+        SaveChanges();
+    }
+
+    public void SaveChanges()
+    {
+        _context.SaveChanges();
     }
 }

@@ -16,6 +16,7 @@ using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using testingStuff.Interfaces;
 using testingStuff.helper;
+using testingStuff.Identity;
 
 namespace testingStuff.Controllers
 {
@@ -278,6 +279,46 @@ namespace testingStuff.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [Authorize(Policy = IdentityData.AdminUserPolicyName)]
+        [HttpPatch]
+        [Route("set_admin/{user_id:guid}")]
+        public async Task<IActionResult> set_admin([FromRoute] Guid user_id, [FromQuery] bool admin)
+        {
+            // configura endpoint para verificar se o user eh REALMENTE admin a partir do jwt token
+            var jwtToken = HelperMethods.decodeToken(/*token, SecretKey*/_configuration, HttpContext);
+
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserID").Value);
+
+            if (!_userRepository.UserExists(userId))
+            {
+                return BadRequest(new ChatBadResponse
+                {
+                    title = "Bad Request",
+                    status = 400,
+                    detail = "The request is invalid."
+                });
+            }
+
+            if (!UserExists(user_id)){
+                return NotFound(new ChatBadResponse
+                {
+                    title = "Not Found",
+                    status = 404,
+                    detail = "That user doesn't exist"
+                });
+            }
+
+            var isAdmin = bool.Parse(jwtToken.Claims.First(x => x.Type == "admin").Value);
+            var isReallyAdmin = _userRepository.getUser(userId)!.isAdmin;
+
+            if (!_userRepository.isReallyAdmin(userId, isAdmin))
+            {
+                return Forbid();
+            }
+            var user = _userRepository.setAdmin(user_id, admin);
+            return Ok(user);
         }
 
         [Authorize]

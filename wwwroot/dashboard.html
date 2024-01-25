@@ -25,6 +25,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
+                        <th>Admin</th>
                         <!-- <th>Email</th> -->
                     </tr>
                 </thead>
@@ -56,10 +57,12 @@
             </h2>
 
             <form id="update_user_form">
-                <label for="username">New Username</label>
+                <label for="username">New Username:</label>
                 <input type="text" name="UserName" id="username" required>
-                <label for="password">New Password</label>
+                <label for="password">New Password:</label>
                 <input type="password" name="passHash" id="password" required>
+                <label for="admin">isAdmin:</label>
+                <input type="checkbox" name="admin" id="admin">
                 <input id="update_user_submit" type="submit" value="Submit the changes!" style="cursor: pointer;">
             </form>
 

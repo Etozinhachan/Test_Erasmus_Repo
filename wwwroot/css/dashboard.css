@@ -1,158 +1,169 @@
-body{
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh !important; 
-    background-color: #f4f4f4;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh !important;
+  background-color: #f4f4f4;
 }
 
 header {
-    height: 10%;
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
+  height: 10%;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
 }
 
-.user-list{
-    flex: 1;
+.user-list {
+  flex: 1;
 }
 
-section{
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+section {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: fixed;
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+.user-list {
+  overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+  height: 20px; /* gives an initial height of 200px to the table */
+}
+.user-list thead th {
+  position: sticky; /* make the table heads sticky */
+  top: 0px; /* table head will be placed from the top of the table and sticks to it */
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #333;
-    color: #fff;
+  background-color: #333;
+  color: #fff;
 }
 
-td .EditButton{
-    padding: 8px;
-    width: 60px;
-    background-color: rgba(120, 140, 226, 0.7);
-    border: 1px solid rgba(63, 74, 121, 0.9);
-    cursor: pointer;
+td .EditButton {
+  padding: 8px;
+  width: 60px;
+  background-color: rgba(120, 140, 226, 0.7);
+  border: 1px solid rgba(63, 74, 121, 0.9);
+  cursor: pointer;
 }
 
-td .DeleteButton{
-    padding: 8px;    
-    width: 60px;
-    background-color: rgba(226, 150, 120, 0.7);
-    border: 1px solid rgba(119, 79, 63, 0.7);
-    cursor: pointer;
+td .DeleteButton {
+  padding: 8px;
+  width: 60px;
+  background-color: rgba(226, 150, 120, 0.7);
+  border: 1px solid rgba(119, 79, 63, 0.7);
+  cursor: pointer;
 }
 
 .user-form {
-    flex: 1;
-    padding: 20px;
-    border-radius: 8px;
-    
+  flex: 1;
+  padding: 20px;
+  border-radius: 8px;
+
 }
 
 form {
-    max-width: 200px;
-    margin: 0 auto;
+  max-width: 200px;
+  margin: 0 auto;
 }
 
 input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 
 
 :root {
-    --sucesspage-list: url(./assets/images/icon-list.svg);
-    --dark-slate-grey: hsl(234, 29%, 20%);
-    --charcoal-grey: hsl(235, 18%, 26%);
-    --grey: hsl(231, 7%, 60%);
-    --tomato: hsl(4, 100%, 67%);
-    --white: hsl(0, 0%, 100%);
-  }
+  --sucesspage-list: url(./assets/images/icon-list.svg);
+  --dark-slate-grey: hsl(234, 29%, 20%);
+  --charcoal-grey: hsl(235, 18%, 26%);
+  --grey: hsl(231, 7%, 60%);
+  --tomato: hsl(4, 100%, 67%);
+  --white: hsl(0, 0%, 100%);
+}
 
 
 .edit_modal {
-    margin: auto;
-    height: 70vh;
-    width: 100%;
-    padding: 3rem 2rem;
-    border: none;
-    border-radius: 1rem;
-  }
-  
-  dialog::backdrop {
-    background-color: hsl(234, 29%, 20%);
-  }
-  
-  .edit_modal_container {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 2rem;
-  
-  }
-  
-  .edit_modal_head {
-    max-width: 200px;
-    margin: 0 auto;
-    font-size: 2.5em;
-    color: var(--dark-slate-grey);
+  margin: auto;
+  height: 70vh;
+  width: 100%;
+  padding: 3rem 2rem;
+  border: none;
+  border-radius: 1rem;
+}
 
-  }
-  
-  .success__note {
-    max-width: 200px;
-    margin: 0 auto;
-    color: var(--dark-slate-grey);
-    line-height: 1.5rem;
-  }
-  
-  #user__email__address {
-    font-weight: 700;
-  }
-  
-  .dismiss__btn {
-    padding: 0.9rem;
-    background: var(--dark-slate-grey);
-    color: var(--white);
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    outline: none;
-    border: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    box-shadow: 1px 2px 5px var(--grey);
-    transition: all 0.5s ease-in-out;
-  }
-  
-  .dismiss__btn:hover {
-    background: linear-gradient(0.25turn,#e04313, hsl(4, 100%, 67%));
-  
-  }
+dialog::backdrop {
+  background-color: hsl(234, 29%, 20%);
+}
 
-#logOutBtn{
-    border: 1px solid;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    cursor: pointer;
+.edit_modal_container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+
+}
+
+.edit_modal_head {
+  max-width: 200px;
+  margin: 0 auto;
+  font-size: 2.5em;
+  color: var(--dark-slate-grey);
+
+}
+
+.success__note {
+  max-width: 200px;
+  margin: 0 auto;
+  color: var(--dark-slate-grey);
+  line-height: 1.5rem;
+}
+
+#user__email__address {
+  font-weight: 700;
+}
+
+.dismiss__btn {
+  padding: 0.9rem;
+  background: var(--dark-slate-grey);
+  color: var(--white);
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  outline: none;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  box-shadow: 1px 2px 5px var(--grey);
+  transition: all 0.5s ease-in-out;
+}
+
+.dismiss__btn:hover {
+  background: linear-gradient(0.25turn, #e04313, hsl(4, 100%, 67%));
+
+}
+
+#logOutBtn {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
 }

@@ -12,7 +12,12 @@ const dismissSucessMsgBtn = document.querySelector(".dismiss__btn");
 var sleep = ms => new Promise(r => setTimeout(r, ms));
 
 window.onload = async () => {
+    
     checkCookies();
+    /* var currentPage = window.location.href.substring(0, window.location.href.indexOf('dashboard.html') + 'dashboard.html'.length);
+    console.log(currentPage) */
+    //window.location.href = currentPage
+    
     /*
         need to implement a function to load all users with this element structure
         <tr>
@@ -125,6 +130,7 @@ function buildRow(user) {
     const row = document.createElement('tr');
     const cellUsername = document.createElement('td')
     const cellId = document.createElement('td')
+    const cellIsAdmin = document.createElement('td')
     const cellButons = document.createElement('td')
     const editButton = document.createElement('button')
     const deleteButton = document.createElement('button')
@@ -132,6 +138,7 @@ function buildRow(user) {
 
     cellUsername.textContent = `${user.userName}`
     cellId.textContent = `${user.id}`
+    cellIsAdmin.textContent = `${user.isAdmin}`
 
     editButton.className = 'EditButton'
     editButton.textContent = 'Edit'
@@ -148,6 +155,7 @@ function buildRow(user) {
     cellButons.append(deleteButton)
     row.append(cellId)
     row.append(cellUsername)
+    row.append(cellIsAdmin)
     row.append(cellButons)
     return row;
 }
@@ -163,15 +171,17 @@ async function editButtonHandler(id) {
         const userUpdateForm = document.querySelector('#update_user_form')
         userUpdateForm.querySelector('#update_user_submit').addEventListener('click', async () => {
             const formData = new FormData(userUpdateForm)
-            await updateUser(userId, formData.get("UserName"), formData.get("passHash"))
+            await updateUser(userId, formData.get("UserName"), formData.get("passHash"), formData.get("admin"))
+
             editModal.close();
+            
             await checkCookies();
             window.location.href = `${window.location.href}`
         })
     }
 }
 
-async function updateUser(userId, username, password) {
+async function updateUser(userId, username, password, isAdmin) {
     const options = {
         method: 'PUT',
         headers: {
@@ -183,12 +193,33 @@ async function updateUser(userId, username, password) {
             "passHash": `${password}`
         })
     }
+    const options2 = {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${await getCookie(jwt_token_Header)}`, // por ai o jwt token guardado no cookie
+            'Content-Type': 'application/json'
+        }
+    }
     try {
         const response = await fetch(`/api/users/${userId}`, options)
+        
+        if (isAdmin.checked){
+            isAdmin = true;
+        }else{
+            isAdmin = false;
+        }
+        console.log(`/api/Users/set_admin/${userId}?admin=true`);
+        const response2 = await fetch(`/api/Users/set_admin/${userId}?admin=true`, options2)
         if (response.status != 204) {
             throw new Error()
         }
+
+        if (response2.status != 200){
+            throw new Error()
+        }
     } catch (error) {
+        /* console.log('rfa')
+        await sleep(10000) */
         console.error(error)
     }
 

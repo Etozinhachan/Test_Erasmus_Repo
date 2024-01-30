@@ -12,10 +12,18 @@ header {
   color: #fff;
   padding: 10px;
   text-align: center;
+/*   position: sticky;
+  top: 0px; */
 }
 
 .user-list {
   flex: 1;
+}
+
+.user-list-scrollable {
+  height: 150px;
+  overflow-y: scroll;
+  border-bottom: 1px solid #ddd;
 }
 
 section {
@@ -27,20 +35,28 @@ section {
 }
 
 table {
-  width: 100%;
+  
   border-collapse: collapse;
   margin-top: 20px;
   table-layout: fixed;
 }
 
-.user-list {
+thead{
+  width: 100%;
+  background-color: #f4f4f4;
+  position: sticky;
+  z-index: 2;
+  top: 0;
+}
+
+/* .user-list {
   overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-  height: 20px; /* gives an initial height of 200px to the table */
-}
-.user-list thead th {
-  position: sticky; /* make the table heads sticky */
-  top: 0px; /* table head will be placed from the top of the table and sticks to it */
-}
+  /* height: 20px; */ /* gives an initial height of 200px to the table */
+/* } */
+/*  .user-list thead th {
+  position: sticky; 
+  top: 0px; 
+}  */
 
 th,
 td {
@@ -50,8 +66,10 @@ td {
 }
 
 th {
+  
   background-color: #333;
   color: #fff;
+  
 }
 
 td .EditButton {

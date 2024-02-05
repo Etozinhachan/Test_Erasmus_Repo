@@ -102,7 +102,7 @@ var checkCookies = async () => {
     let erai_jwt = await getCookie(jwt_token_Header, true);
     //console.log(decodeURIComponent(document.cookie));
     //console.log(await userExists(erai_jwt))
-    if (username == "" || pw == "" || erai_jwt == "" || !(await userExists(erai_jwt))) {
+    if (username == "" || pw == "" || erai_jwt == "") {
         deleteCookie('UserName')
         deleteCookie('passHash')
         deleteCookie(jwt_token_Header)

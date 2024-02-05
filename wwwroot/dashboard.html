@@ -69,9 +69,13 @@
                     <input type="checkbox" name="admin" id="admin">
                     <input id="update_user_submit" type="submit" value="Submit the changes!" style="cursor: pointer;"> -->
                     <label for="username">New Username:</label>
-                    <input type="text" name="UserName" id="username" required>
+                    <input type="text" name="UserName" id="username" 
+                    onkeypress="return checkUsernameCharacterValidity(event)"
+                    required minlength="3" maxlength="64">
                     <label for="password">New Password:</label>
-                    <input type="password" name="passHash" id="password" required>
+                    <input type="password" name="passHash" id="password" 
+                    onkeypress="return checkPasswordCharacterValidity(event)"
+                    required minlength="8" maxlength="32">
                     <label id="is_admin_label">⬅ is admin
                         <input type="checkbox" name="admin" id="admin">
                         <span></span>
@@ -88,6 +92,7 @@
 
     <script src="./js/dashboard.js"></script>
     <script src="js/getHostname.js"></script>
+    <script src="js/loginHelper.js"></script>
 </body>
 
 </html>

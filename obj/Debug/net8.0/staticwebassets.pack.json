@@ -1,115 +1,115 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\LICENSE.txt",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\LICENSE.txt",
       "PackagePath": "staticwebassets\\assets\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\png\\bx-female.png",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\png\\bx-female.png",
       "PackagePath": "staticwebassets\\assets\\images\\png\\bx-female.png"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\png\\bx-male.png",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\png\\bx-male.png",
       "PackagePath": "staticwebassets\\assets\\images\\png\\bx-male.png"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bx-female.svg",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bx-female.svg",
       "PackagePath": "staticwebassets\\assets\\images\\svg\\bx-female.svg"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bx-male.svg",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bx-male.svg",
       "PackagePath": "staticwebassets\\assets\\images\\svg\\bx-male.svg"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bx-trash.svg",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bx-trash.svg",
       "PackagePath": "staticwebassets\\assets\\images\\svg\\bx-trash.svg"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bxs-lock-alt.svg",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bxs-lock-alt.svg",
       "PackagePath": "staticwebassets\\assets\\images\\svg\\bxs-lock-alt.svg"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bxs-user.svg",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\assets\\images\\svg\\bxs-user.svg",
       "PackagePath": "staticwebassets\\assets\\images\\svg\\bxs-user.svg"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\chat.html",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\chat.html",
       "PackagePath": "staticwebassets\\chat.html"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\css\\chat.css",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\chat.css",
       "PackagePath": "staticwebassets\\css\\chat.css"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\css\\dashboard.css",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\dashboard.css",
       "PackagePath": "staticwebassets\\css\\dashboard.css"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\css\\dashboardResponsive.css",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\dashboardResponsive.css",
       "PackagePath": "staticwebassets\\css\\dashboardResponsive.css"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\css\\login.css",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\login.css",
       "PackagePath": "staticwebassets\\css\\login.css"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\css\\newChat.css",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\css\\newChat.css",
       "PackagePath": "staticwebassets\\css\\newChat.css"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\dashboard.html",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\dashboard.html",
       "PackagePath": "staticwebassets\\dashboard.html"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\endpoints.html",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\endpoints.html",
       "PackagePath": "staticwebassets\\endpoints.html"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\index.html",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\dashboard.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\dashboard.js",
       "PackagePath": "staticwebassets\\js\\dashboard.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\getHostname.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\getHostname.js",
       "PackagePath": "staticwebassets\\js\\getHostname.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\login.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\login.js",
       "PackagePath": "staticwebassets\\js\\login.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\newChat.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\newChat.js",
       "PackagePath": "staticwebassets\\js\\newChat.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\script.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\script.js",
       "PackagePath": "staticwebassets\\js\\script.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\tefas.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\tefas.js",
       "PackagePath": "staticwebassets\\js\\tefas.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\js\\typeWriter.js",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\js\\typeWriter.js",
       "PackagePath": "staticwebassets\\js\\typeWriter.js"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\newChat.html",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\newChat.html",
       "PackagePath": "staticwebassets\\newChat.html"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\package-lock.json",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\package-lock.json",
       "PackagePath": "staticwebassets\\package-lock.json"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\package.json",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\package.json",
       "PackagePath": "staticwebassets\\package.json"
     },
     {
-      "Id": "C:\\Users\\psubg\\OneDrive\\Documentos\\C# Projects\\ErasmusProjectAPI\\Test_Erasmus_Repo\\wwwroot\\tefasf.html",
+      "Id": "C:\\Users\\ESL1449\\Documents\\MEGA\\erasmus_project\\Test_Erasmus_Repo\\wwwroot\\tefasf.html",
       "PackagePath": "staticwebassets\\tefasf.html"
     },
     {

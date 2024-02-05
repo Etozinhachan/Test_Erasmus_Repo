@@ -179,19 +179,22 @@ async function editButtonHandler(id) {
         editModal.showModal();
         const userUpdateForm = document.querySelector('#update_user_form')
         userUpdateForm.addEventListener('submit', async (event) => {
-            event.preventDefault() 
-            const formData = new FormData(userUpdateForm)
-            /* if (formData.get("UserName") == null || formData.get("passHash") == null) {
-                return
-            }  */
-            
-            editModal.close();
-
-            await updateUser(userId, formData.get("UserName"), formData.get("passHash"), formData.get("admin"))
-
-            
-            await checkCookies();
-            refreshPage(window.location.href)
+            event.preventDefault();
+            var result = confirm("You sure you want to update this user?");
+            if (result){
+                const formData = new FormData(userUpdateForm)
+                /* if (formData.get("UserName") == null || formData.get("passHash") == null) {
+                    return
+                }  */
+                
+                editModal.close();
+    
+                await updateUser(userId, formData.get("UserName"), formData.get("passHash"), formData.get("admin"))
+    
+                
+                await checkCookies();
+                refreshPage(window.location.href)
+            }
         })
     }
 }

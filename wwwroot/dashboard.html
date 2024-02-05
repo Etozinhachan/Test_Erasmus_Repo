@@ -56,24 +56,38 @@
         <div class="edit_modal_container">
             <img src="./assets/images/icon-success.svg" alt="" />
             <h2 class="edit_modal_head">
-                <p style="text-wrap: nowrap;">Edit User Page</p>
+                <p>Edit User Page</p>
             </h2>
 
-            <form id="update_user_form">
-                <label for="username">New Username:</label>
-                <input type="text" name="UserName" id="username" required>
-                <label for="password">New Password:</label>
-                <input type="password" name="passHash" id="password" required>
-                <label for="admin">isAdmin:</label>
-                <input type="checkbox" name="admin" id="admin">
-                <input id="update_user_submit" type="submit" value="Submit the changes!" style="cursor: pointer;">
-            </form>
+            <div id="form_div">
+                <form id="update_user_form">
+                   <!--  <label for="username">New Username:</label>
+                    <input type="text" name="UserName" id="username" required>
+                    <label for="password">New Password:</label>
+                    <input type="password" name="passHash" id="password" required>
+                    <label for="admin">isAdmin:</label>
+                    <input type="checkbox" name="admin" id="admin">
+                    <input id="update_user_submit" type="submit" value="Submit the changes!" style="cursor: pointer;"> -->
+                    <label for="username">New Username:</label>
+                    <input type="text" name="UserName" id="username" required>
+                    <label for="password">New Password:</label>
+                    <input type="password" name="passHash" id="password" required>
+                    <label id="is_admin_label">⬅ is admin
+                        <input type="checkbox" name="admin" id="admin">
+                        <span></span>
+                    </label>
+                    
+                    <input id="update_user_submit" type="submit" value="Submit the changes!" style="cursor: pointer;">
+                </form>
+            </div>
+
 
             <button type="button" title="dismiss" class="dismiss__btn">Dismiss message</button>
         </div>
     </dialog>
 
     <script src="./js/dashboard.js"></script>
+    <script src="js/getHostname.js"></script>
 </body>
 
 </html>

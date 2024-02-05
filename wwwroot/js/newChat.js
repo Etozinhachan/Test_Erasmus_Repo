@@ -78,7 +78,7 @@ var setCookie = async (cname, cvalue, duration) => {
 }
 
 var getCookie = async (cname, ignoreCheck) => {
-    if (ignoreCheck -= undefined) {
+    if (ignoreCheck == undefined) {
         checkCookies();
     }
     let name = cname + "=";

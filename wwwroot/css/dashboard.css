@@ -6,6 +6,10 @@ body {
   background-color: #f4f4f4;
 }
 
+*{
+  box-sizing: border-box;
+}
+
 header {
   height: 10%;
   background-color: #333;
@@ -134,41 +138,142 @@ input {
 .edit_modal {
   margin: auto;
   height: 70vh;
-  width: 100%;
-  padding: 3rem 2rem;
+  width: 90%;
   border: none;
   border-radius: 1rem;
+  opacity: 0;
+  scale: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.8s;
 }
 
-dialog::backdrop {
-  background-color: hsl(234, 29%, 20%);
+.edit_modal[open]{
+  opacity: 1;
+  scale: 1;
 }
+
+/* dialog::backdrop {
+  background-color: hsl(234, 29%, 20%);
+} */
 
 .edit_modal_container {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 2rem;
+  /* display: grid;
+  grid-template-columns: repeat(1, 1fr); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+/*   position: relative;
+  top: 25%; 
+  left: 25%;*/
+  gap: 1.2rem; 
+  
 
+}
+
+#form_div form{
+  display: grid;
+  max-width: 400px;
+}
+
+
+/* container */
+#is_admin_label {
+  position: relative; /* to contain absolute elements */
+  padding-left:30px; /* free space for custom checkbox */
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* hide default checkbox  */
+#is_admin_label input[type=checkbox] {
+  position: absolute; /* prevent taking any space */
+  /* cross-browser hidingg */
+  opacity: 0;
+  width:0; 
+  height:0;
+}
+
+/* custom checkbox */
+#is_admin_label span {
+  position: absolute;
+  /* position to the free space in <label> */
+  top:0;
+  left:0;
+  width:20px; 
+  height:20px;
+  background-color: #ddd;
+  transition: .3s background-color; /* slight transition */
+}
+
+/* the check icon */
+#is_admin_label span:after {
+  content: "";
+  position: absolute;
+  display: none;
+  
+  /* check icon */
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+#is_admin_label:hover span {
+  background-color: #ccc;
+}
+
+/**** Here's the trick ***/
+#is_admin_label input:checked ~ span {
+  background-color: #2eaadc;
+}
+
+#is_admin_label input:checked ~ span:after {
+  display:block;
+}
+
+#update_user_form input{
+  width: 100%;
+}
+
+#update_user_submit{
+  border: 0;
+  border-radius: 0.4rem;
+  box-shadow: 1px 2px 5px var(--grey);
+}
+
+#update_user_submit:hover{
+  background-color: rgba(200, 200, 200, 0.45);
 }
 
 .edit_modal_head {
-  max-width: 200px;
+  max-width: 400px;
   margin: 0 auto;
   font-size: 2.5em;
   color: var(--dark-slate-grey);
-
 }
 
-.success__note {
+.edit_modal_head p{
+  margin: 0;
+}
+
+
+
+/* .success__note {
   max-width: 200px;
   margin: 0 auto;
   color: var(--dark-slate-grey);
   line-height: 1.5rem;
-}
+} */
 
-#user__email__address {
+/* #user__email__address {
   font-weight: 700;
-}
+} */
 
 .dismiss__btn {
   padding: 0.9rem;
@@ -182,6 +287,7 @@ dialog::backdrop {
   cursor: pointer;
   box-shadow: 1px 2px 5px var(--grey);
   transition: all 0.5s ease-in-out;
+  width: 100%;
 }
 
 .dismiss__btn:hover {

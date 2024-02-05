@@ -1,5 +1,12 @@
 const jwt_token_Header = "erai-jwt-token";
 
+var sleep = ms => new Promise(r => setTimeout(r, ms));
+
+
+window.onload = async() =>{
+    await checkCookies()
+}
+
 var setCookie = async (cname, cvalue, duration) => {
     const d = new Date();
     var days = duration.days,
@@ -55,7 +62,7 @@ var checkCookies = async () => {
         deleteCookie('UserName')
         deleteCookie('passHash')
         deleteCookie(jwt_token_Header)
-        window.location.replace(`${window.location.href}`.replace('dashboard.html', ''));
+        window.location.replace(`${window.location.href}`.replace('tefasf.html', ''));
     }
 }
 
@@ -67,12 +74,13 @@ const form = document.querySelector('form').addEventListener('submit', async (ev
 
 async function submitHandle(event){
     event.preventDefault()
+    const form = document.querySelector('form')
     const formData = new FormData(form)
-    var users = await loadUsers();
+    const users = await loadUsers()
     for (const [name,value] of formData) {
         console.log(name, ":", value)
       }
-    callAdmin(users[0].id, formData.get("admin"))
+     callAdmin(users[0].id, formData.get("admin")) 
 }
 
 async function getAllUsers() {
@@ -114,13 +122,13 @@ async function callAdmin(userId, isAdmin) {
         }
     }
     console.log(isAdmin)
-     if (isAdmin.checked) {
+     if (isAdmin == 'on') {
         isAdmin = true;
     } else {
         isAdmin = false;
     } 
-    console.log(`/api/Users/set_admin/${userId}?admin=true`);
-    const response2 = await fetch(`/api/Users/set_admin/${userId}?admin=true`, options2)
+    console.log(`/api/Users/set_admin/${userId}?admin=${isAdmin}`);
+    const response2 = await fetch(`/api/Users/set_admin/${userId}?admin=${isAdmin}`, options2)
 
     console.log(await response2.json())
 

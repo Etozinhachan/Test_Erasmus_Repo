@@ -17,14 +17,14 @@ var sleep = ms => new Promise(r => setTimeout(r, ms));
 window.onload = async function () {
     await checkCookies();
     await loadChats();
-    pageAccessedByReload = (
+    /* pageAccessedByReload = (
         (window.performance.navigation && window.performance.navigation.type === 1) ||
           window.performance
             .getEntriesByType('navigation')
             .map((nav) => nav.type)
             .includes('reload')
-    )
-    if(pageAccessedByReload){
+    ) */
+    
         //console.log('rawrz')
         const current_chat_id = await getCookie('current_chat')
 
@@ -36,7 +36,7 @@ window.onload = async function () {
                 deleteCookie('current_chat')
             }
         });
-    }
+    
     //console.log(await isAdmin(await getCookie(jwt_token_Header)));
     if (await isAdmin(await getCookie(jwt_token_Header))){
         const navSide = document.querySelector('.sidebar nav')
@@ -229,8 +229,8 @@ async function getMessage() {
             if (data.userPrompts[0].prompt) {
                 if (data.userPrompts[0].prompt_number == 0) {
 
-                    if (data.id, data.userPrompts[0].prompt.length > 14){
-                        cur_chat = updateHistory(data.id, data.userPrompts[0].prompt.substring(0, 14) + '...')
+                    if (data.id, data.userPrompts[0].prompt.length > 10){
+                        cur_chat = updateHistory(data.id, data.userPrompts[0].prompt.substring(0, 10) + '...')
                     }else{
                         cur_chat = updateHistory(data.id, data.userPrompts[0].prompt)
                     }
@@ -283,7 +283,9 @@ async function getMessage() {
 
             } */
             //await sleep(3000)
-            await sleep(2500)
+            //console.log('rawr')
+            await sleep(5000)
+            //console.log('jorge')
             await generateAiResponse(`${data.conversation_id}`)
             await sleep(5000)
             enable_send_button();
@@ -493,8 +495,8 @@ async function loadChats() {
     const chats = await getChats()
     //console.log('meow')
     chats.forEach(chat => {
-        if(chat.userPrompts[0].prompt.length > 14){
-            updateHistory(chat.id, chat.userPrompts[0].prompt.substring(0, 14) + '...')
+        if(chat.userPrompts[0].prompt.length > 10){
+            updateHistory(chat.id, chat.userPrompts[0].prompt.substring(0, 10) + '...')
         }else{
             updateHistory(chat.id, chat.userPrompts[0].prompt)
         }
@@ -558,6 +560,9 @@ async function getAllUsers() {
 }
 
 var logout = async () => {
+    if (!response_finished_generating){
+        return;
+    }
     deleteCookie('UserName')
     deleteCookie('passHash')
     deleteCookie(jwt_token_Header)

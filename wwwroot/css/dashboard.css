@@ -6,6 +6,20 @@ body {
   background-color: #f4f4f4;
 }
 
+body::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: #b6b5b5;        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #ddd;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #b6b5b5;  /* creates padding around scroll thumb */
+}
+
 *{
   box-sizing: border-box;
 }

@@ -86,9 +86,13 @@ input:focus{
 
 .input-container #submit{
     position: absolute;
-    right: 0;
-    bottom: 15px;
+    right: -30px;
+    bottom: 1px;
     cursor: pointer;
+    z-index: 2;
+    text-align: center;
+    padding: 12px;
+    background-color: rgba(63,63,75, 1);
 }
 
 button{
@@ -193,6 +197,18 @@ nav {
 
 .msg-row2{
     justify-content: flex-end;
+}
+
+.msg-row h2{
+    font-weight: bold;
+}
+
+.msg-row.msg-row2 {
+    text-align: right;
+}
+
+.msg-row {
+    text-align: left;
 }
 
 

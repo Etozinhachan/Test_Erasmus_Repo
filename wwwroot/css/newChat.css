@@ -1,6 +1,7 @@
 * {
     color: #fff;
     font-family: 'poppins', sans-serif;
+    /* font-family: 'Courier New', Courier, monospace; */
 }
 
 body {
@@ -193,6 +194,17 @@ nav {
 .msg-row2{
     justify-content: flex-end;
 }
+
+
+
+/* FAZER A ROW DE USER SER ALIGN RIGHT, ROW DE AI ALIGN LEFT : D */
+/* .msg-row .msg-text p{
+    text-align: left;
+}
+
+.msg-row .msg-row2 .msg-text p{
+    text-align: right;
+} */
 
 #logOutBtn{
     margin: 0px;

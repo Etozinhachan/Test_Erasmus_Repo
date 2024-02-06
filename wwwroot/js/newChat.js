@@ -150,7 +150,7 @@ async function generateAiResponse(chat_id, aiResponseElementRef) {
     aiResponseElement.className = 'msg-row'
     aiResponseElement.innerHTML = `<img src="./assets/images/svg/bx-male.svg" alt="Ai's icon" class="msg-img">
             <div class="msg-text">
-                <h2>Ai</h2>
+                <h2>AI</h2>
                 ${actualPElement}
             </div>`
     if (aiResponseElementRef == undefined) {
@@ -266,9 +266,7 @@ async function getMessage() {
             createUserPrompt();
             chatBoxElement.scrollTo(0, chatBoxElement.scrollHeight);
 
-            disable_send_button();
-
-            await sleep(5000)
+            disable_send_button();            
 
             var response = await fetch(`/api/chat/conversation/${current_chat_clicked.id}`, options)
             var data = await response.json();
@@ -285,6 +283,7 @@ async function getMessage() {
 
             } */
             //await sleep(3000)
+            await sleep(2500)
             await generateAiResponse(`${data.conversation_id}`)
             await sleep(5000)
             enable_send_button();
@@ -342,7 +341,7 @@ async function load_chat(chat) {
         aiResponseElement.className = 'msg-row'
         aiResponseElement.innerHTML = `<img src="./assets/images/svg/bx-male.svg" alt="Ai's icon" class="msg-img">
                 <div class="msg-text">
-                    <h2>Ai</h2>
+                    <h2>AI</h2>
                     <p>${cAiResponse.response}</p>
                 </div>`
         chatBoxElement.append(aiResponseElement)
@@ -413,11 +412,13 @@ function updateHistory(chat_id, title) {
     iconElement.style.height = '14px'
 
     iconElement.style.display = 'none'
+    /* iconElement.style.position = 'fixed' */
+    iconElement.style.float = 'right'
     const pElement = document.createElement('p');
     pElement.textContent = title
     //pElement.setAttribute('id', chat.id)
     pElement.id = chat_id
-    iconElement.style.marginLeft = '15%'
+    /* iconElement.style.marginLeft = '15%' */ 
     pElement.addEventListener('click', async () => await changeChat(pElement))
     pElement.addEventListener('mouseenter', async () => {iconElement.style.display = 'inline-block'})
     pElement.addEventListener('mouseleave', () => iconElement.style.display = 'none')
@@ -574,11 +575,11 @@ function enable_send_button() {
     submitButton.style.pointerEvents = 'all'
 }
 
-submitButton.addEventListener('click', getMessage)
+submitButton.addEventListener('click', async() => await getMessage())
 
-buttonElement.addEventListener('click', createNewChat)
+buttonElement.addEventListener('click', async() => await createNewChat())
 
-logOutElement.addEventListener('click', logout)
+logOutElement.addEventListener('click', async() => await logout())
 
 onkeyup = async (event) => {
     if (event.keyCode == 13) {

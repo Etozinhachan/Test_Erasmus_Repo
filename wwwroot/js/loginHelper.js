@@ -31,6 +31,13 @@ function pasteEventHandler(){
     return false
 }
 
+function preventBadPasting(pasteEvent){
+    /* clipboardData = pasteEvent.clipboardData
+    clipboardTextData = clipboardData.getData('Text')
+     */
+    pasteEvent.preventDefault();
+}
+
 inputs.forEach((input) => {
-    input.addEventListener('paste', () => { return false })
+    input.addEventListener('paste', (event) => { preventBadPasting(event) })
 })

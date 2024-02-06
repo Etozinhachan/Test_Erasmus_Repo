@@ -137,8 +137,8 @@ input {
 
 .edit_modal {
   margin: auto;
-  height: 70vh;
-  width: 90%;
+  height: 60vh;
+  width: 25%;
   border: none;
   border-radius: 1rem;
   opacity: 0;
@@ -147,6 +147,7 @@ input {
   justify-content: center;
   align-items: center;
   transition: all 0.8s;
+  box-shadow: 4px 8px 10px var(--grey);
 }
 
 .edit_modal[open]{
@@ -154,9 +155,9 @@ input {
   scale: 1;
 }
 
-/* dialog::backdrop {
-  background-color: hsl(234, 29%, 20%);
-} */
+dialog::backdrop {
+  background-color: rgba(200,200,200, 0.25)/* hsl(234, 29%, 20%) */;
+} 
 
 .edit_modal_container {
   /* display: grid;
